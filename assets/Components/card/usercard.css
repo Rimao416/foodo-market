@@ -1,0 +1,75 @@
+
+/*CARD USER*/
+.card_user{
+    text-align: center;
+    width: 230px;
+    height: 180px;
+    background-color: #fff;
+    border: 1px solid #ededed;
+    border-radius: 4px;
+    margin-bottom: 30px;
+    display: inline-block;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 1px 1px #0003;
+    overflow: hidden;
+    margin-left: 20px;
+}
+.card_user .profile_user{
+    margin-bottom: 10px;
+    transition: .5s ease-in-out;
+}
+
+.card_user.active .profile_user{
+    filter: blur(30px);
+}
+.card_user  .dot{
+    position: absolute;
+    top: 0;
+    text-align: left;
+    left: 90%;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: .3s ease;
+}
+.card_user .dot:hover{
+    color: blue;
+}
+
+
+.card_user img{
+    text-align: center;
+    position: relative;
+    top: 0;
+    width: 40%;
+    border-radius: 50%;
+}
+.user_details h5{
+    color: #333;
+    font-weight: 400;
+}
+.user_details h4{
+    font-family: Poppins;
+    font-weight: 600;
+}
+/*SUB OPERATIONS CLASSES*/
+.operations_users{
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    text-align: center;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px #0003;
+    color: #333;
+    visibility: hidden;
+    transition: .1s ease;
+}
+.operations_users.hide{
+    visibility: visible;
+}
+.operations_users .operations{
+    display: block;
+}

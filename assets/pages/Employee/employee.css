@@ -1,0 +1,163 @@
+.employee{
+    flex: 4;
+}
+.employee .head{
+    margin-left: 20px;
+}
+.employee .head .body_header{
+    display: flex;
+    justify-content: space-between;
+}
+.employee .head .body_header .right_part{
+    position: relative;
+    margin-right: 5%;
+
+}
+/*    */
+
+.employee .head .body_header .right_part .icons{
+    margin-right: 10px;
+    display: inline;
+} 
+.employee .head .body_header .right_part button{
+    padding: 6px 12px;
+    font-family: Poppins;
+    border-radius: 15px;
+    cursor: pointer;
+    margin: 0;
+}
+
+.employee .head .body_header .right_part svg{
+    position: relative;
+    background-color: white;
+    cursor: pointer;
+    display: inline-block;
+    width: 40px;
+    border-width: 3em;
+    box-shadow: 0 1px 1px #0003;
+    color: black;
+    height: 20px;
+    font-size: 10px;
+}
+.employee .head .body_header .right_part svg path{
+    background-color: red;
+    width: 10px;
+}
+.employee .head .body_header .right_part button:hover, button:focus, button:active,button {
+    background-color: #ff851a;
+    border: 1px solid #ff851a;
+    color: #fff;
+}
+
+.employee .head ul li{
+    list-style-type: none;
+    font-weight: 600;
+    color: #333;
+}
+.employee .head ul li span{
+    font-weight: 400;
+}
+.employee .search_control{
+    margin-bottom: 15px;
+}
+.employee .search_control input, .employee .search_control button{
+    margin-left: 20px;
+    width: 22%;
+    height: 39px;
+}
+.employee .search_control input, .employee .search_control input:focus{
+    border: none;
+    outline: none;
+    font-weight: 500;
+    font-family: Poppins;
+    padding: 10px;
+    
+}
+.employee .search_control input:focus{
+    border: 1px solid #344050;
+}
+.employee .search_control button{
+    outline: none;
+    font-family: Roboto;
+    font-weight: 500;
+    border: none;
+    border-radius: 10px;
+    background: #4ab657;
+    border: 1px solid #4ab657;
+    color: #fff;
+}
+
+/*CARD USER*/
+.card_user{
+    text-align: center;
+    width: 230px;
+    height: 180px;
+    background-color: #fff;
+    border: 1px solid #ededed;
+    border-radius: 4px;
+    margin-bottom: 30px;
+    display: inline-block;
+    padding: 20px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 1px 1px #0003;
+    overflow: hidden;
+    margin-left: 20px;
+}
+.card_user .profile_user{
+    margin-bottom: 10px;
+    transition: .5s ease-in-out;
+}
+
+.card_user.active .profile_user{
+    filter: blur(30px);
+}
+.card_user  .dot{
+    position: absolute;
+    top: 0;
+    text-align: left;
+    left: 90%;
+    cursor: pointer;
+    margin-top: 15px;
+    transition: .3s ease;
+}
+.card_user .dot:hover{
+    color: blue;
+}
+
+
+.card_user img{
+    text-align: center;
+    position: relative;
+    top: 0;
+    width: 40%;
+    border-radius: 50%;
+}
+.user_details h5{
+    color: #333;
+    font-weight: 400;
+}
+.user_details h4{
+    font-family: Poppins;
+    font-weight: 600;
+}
+/*SUB OPERATIONS CLASSES*/
+.operations_users{
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    text-align: center;
+    background-color: #fff;
+    padding: 10px;
+    border-radius: 4px;
+    box-shadow: 0 1px 1px #0003;
+    color: #333;
+    visibility: hidden;
+    transition: .1s ease;
+}
+.operations_users.hide{
+    visibility: visible;
+}
+.operations_users .operations{
+    display: block;
+}
