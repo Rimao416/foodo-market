@@ -54,22 +54,3 @@
     font-weight: 600;
 }
 /*SUB OPERATIONS CLASSES*/
-.operations_users{
-    z-index: 1;
-    position: absolute;
-    top: 0;
-    text-align: center;
-    background-color: #fff;
-    padding: 10px;
-    border-radius: 4px;
-    box-shadow: 0 1px 1px #0003;
-    color: #333;
-    visibility: hidden;
-    transition: .1s ease;
-}
-.operations_users.hide{
-    visibility: visible;
-}
-.operations_users .operations{
-    display: block;
-}

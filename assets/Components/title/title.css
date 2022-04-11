@@ -1,0 +1,82 @@
+.head .body_header{
+    display: flex;
+    justify-content: space-between;
+}
+ .head .body_header .right_part{
+    position: relative;
+    margin-right: 5%;
+
+}
+/*    */
+
+ .head .body_header .right_part .icons{
+    margin-right: 10px;
+    display: inline;
+} 
+ .head .body_header .right_part button{
+    padding: 6px 12px;
+    font-family: Poppins;
+    border-radius: 15px;
+    cursor: pointer;
+    margin: 0;
+}
+
+ .head .body_header .right_part svg{
+    position: relative;
+    background-color: white;
+    cursor: pointer;
+    display: inline-block;
+    width: 40px;
+    border-width: 3em;
+    box-shadow: 0 1px 1px #0003;
+    color: black;
+    height: 20px;
+    font-size: 10px;
+}
+ .head .body_header .right_part svg path{
+    background-color: red;
+    width: 10px;
+}
+ .head .body_header .right_part button:hover, button:focus, button:active,button {
+    background-color: #ff851a;
+    border: 1px solid #ff851a;
+    color: #fff;
+}
+
+ .head ul li{
+    list-style-type: none;
+    font-weight: 600;
+    color: #333;
+}
+ .head ul li span{
+    font-weight: 400;
+}
+ .search_control{
+    margin-bottom: 15px;
+}
+ .search_control input,  .search_control button{
+    margin-left: 20px;
+    width: 22%;
+    height: 39px;
+}
+ .search_control input,  .search_control input:focus{
+    border: none;
+    outline: none;
+    font-weight: 500;
+    font-family: Poppins;
+    padding: 10px;
+    
+}
+ .search_control input:focus{
+    border: 1px solid #344050;
+}
+ .search_control button{
+    outline: none;
+    font-family: Roboto;
+    font-weight: 500;
+    border: none;
+    border-radius: 10px;
+    background: #4ab657;
+    border: 1px solid #4ab657;
+    color: #fff;
+}

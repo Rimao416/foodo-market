@@ -1,0 +1,6 @@
+.departments{
+    flex: 4;
+}
+.departments .head{
+    margin-left: 20px;
+}

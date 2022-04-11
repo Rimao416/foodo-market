@@ -11,6 +11,8 @@ import Home from "./pages/Home/Home";
 import Topbar from "./Components/topbar/Topbar";
 import Sidebar from "./Components/Sidebar/Sidebar";
 import Employee from "./pages/Employee/Employee";
+import Departments from "./pages/Departments/Departments";
+
 const App = () => {
   return (
     <HashRouter>
@@ -22,6 +24,7 @@ const App = () => {
             <Sidebar />
             <Route path="/" exact component={Home} />
             <Route path="/employee" exact component={Employee}/>
+            <Route path="/departments" exact component={Departments}/>
           </div>
         </>
       </Switch>
