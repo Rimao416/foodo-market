@@ -23,7 +23,9 @@ const Modal = ({ isOpened, onClose, Type, id, tables, setTables }) => {
   useEffect(() => {
     if (Type == "AJOUTER_DEPARTEMENT") {
       setTitle("Ajouter un département");
-      /*setRetour(
+      /*
+      <Supprimerdep onClose={onClose} onRemove={onRemove}/>
+      setRetour(
         <Ajouterdep
           handleSubmit={handleSubmit}
           handleChange={handleChange}
@@ -71,33 +73,23 @@ const Modal = ({ isOpened, onClose, Type, id, tables, setTables }) => {
     const name = event.currentTarget.name;
     setDepartement({ ...departement, [name]: value });
   };
+  /*--------------------------------------------------------------MODIFICATION D'UN DEPARTEMENT------------------------------------*/
   const handleSubmit = async (event) => {
     event.preventDefault();
     var apiError = {};
     try {
       if (id != 0) {
-        var stop = false;
-        var i = 0;
-        const response = await axios.put(
+        await axios.put(
           "http://localhost:8000/api/departements/" + id,
           departement
         );
-        var mon_id = 0;
-        /*tables.map((t)=>{
-            if(t.Nom=)
-        })*/
-        /*
-        for(i=0;i<tables.length;i++){
-            if((tables[i].Nom == response.data.Nom)){
-                mon_id=i
+        tables.map((t)=>{
+            if(t.id==id){
+                t.Nom=departement.Nom
             }
-        }
-        console.log(mon)*/
-
-        tables = "BG";
-
+        })
         //----------------------------------------------------- AJOUT DU DEPARTEMENT -----------------------------------------------------
-      } else {
+      } else if(id==0) {
         const response = await axios.post(
           "http://localhost:8000/api/departements",
           departement
@@ -106,7 +98,7 @@ const Modal = ({ isOpened, onClose, Type, id, tables, setTables }) => {
         tables.push({ id, Nom });
         setTables(tables);
       }
-
+      
       setDepartement({ Nom: "" });
     } catch (error) {
       error.response.data.violations.forEach((violation) => {
@@ -120,12 +112,14 @@ const Modal = ({ isOpened, onClose, Type, id, tables, setTables }) => {
     }
   };
 
-  //LA SUPPRESSION MARCHE A MERVEILLES
+  //------------------------------------------------------------SUPPRESSION D'UN DEPARTEMENT-------------------------------------------------
   const onRemove = async (event) => {
-      console.log(id)
+    console.log(id);
     try {
-      const response=await axios.delete("http://localhost:8000/api/departements/" + id)
-      setTables(tables.filter(table =>table.id != id))
+      const response = await axios.delete(
+        "http://localhost:8000/api/departements/" + id
+      );
+      setTables(tables.filter((table) => table.id != id));
       onClose();
     } catch (error) {
       console.log("erreur");
@@ -147,15 +141,13 @@ const Modal = ({ isOpened, onClose, Type, id, tables, setTables }) => {
           <h5 className="modal-title">{title}</h5>
         </div>
         <div className="modal-body">
-          <h6>Voulez vous réellement supprimer cet élément</h6>
-          <div className="form-flex-button">
-            <button className="btn-info" onClick={() => onClose()}>
-              Annuler
-            </button>
-            <button className="btn-danger" onClick={() => onRemove()}>
-              Supprimer
-            </button>
-          </div>
+          <Ajouterdep
+            handleSubmit={handleSubmit}
+            handleChange={handleChange}
+            errors={errors}
+            departement={departement}
+            id={id}
+          />
         </div>
       </div>
     </div>,
