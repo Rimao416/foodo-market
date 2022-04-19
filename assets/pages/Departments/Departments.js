@@ -9,17 +9,13 @@ import table from "../../styles/table.css";
 import Modal from "../../Components/modal/Modal";
 
 import { registry } from "chart.js";
-import "../../Components/modal/Modal"
-
-
-
-
+import "../../Components/modal/Modal";
 
 const Departments = () => {
   const [depid, setDepid] = useState(0);
-  const [isModalOpened,setIsModalOpened]=useState(false)
+  const [isModalOpened, setIsModalOpened] = useState(false);
   const [departements, setDepartements] = useState([]);
-  const [launch,setLaunch]=useState(false)
+  const [launch, setLaunch] = useState(false);
   const [type, setType] = useState("");
   useEffect(() => {
     axios
@@ -46,7 +42,7 @@ const Departments = () => {
                   onClick={() => {
                     setDepid(0);
                     setIsModalOpened(true);
-                    setType("AJOUTER_DEPARTEMENT")
+                    setType("AJOUTER_DEPARTEMENT");
                   }}
                 >
                   Ajouter un département
@@ -74,8 +70,8 @@ const Departments = () => {
                         onClick={() => {
                           setDepid(departement.id);
                           setIsModalOpened(true);
-                          setType("MODIFIER_DEPARTEMENT")
-                          setLaunch(true)
+                          setType("MODIFIER_DEPARTEMENT");
+                          setLaunch(true);
                         }}
                         id={departement.id}
                       >
@@ -84,9 +80,9 @@ const Departments = () => {
                       <button
                         className="danger"
                         onClick={() => {
-                          setIsModalOpened(true)
+                          setIsModalOpened(true);
                           setDepid(departement.id);
-                          setType("SUPPRIMER_DEPARTEMENT")
+                          setType("SUPPRIMER_DEPARTEMENT");
                         }}
                         id={departement.id}
                       >
@@ -101,9 +97,15 @@ const Departments = () => {
           </table>
         </div>
       </div>
- <Modal isOpened={isModalOpened} onClose={()=>setIsModalOpened(false)} Type={type} id={depid}/>
+      <Modal
+        isOpened={isModalOpened}
+        onClose={() => setIsModalOpened(false)}
+        Type={type}
+        id={depid}
+        tables={departements}
+        setTables={setDepartements}
+      />
     </>
   );
-};
-
+}
 export default Departments;

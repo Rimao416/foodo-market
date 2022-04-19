@@ -14,29 +14,37 @@ import Supprimerdep from "../forms/Supprimerdep";
             errors={errors}
             departement={departement}
           /> */
-const Modal = ({ isOpened, onClose, Type, id }) => {
+const Modal = ({ isOpened, onClose, Type, id, tables, setTables }) => {
   const [departement, setDepartement] = useState({
     Nom: "",
   });
   const [title, setTitle] = useState("Ajouter un département");
   const [retour, setRetour] = useState(<></>);
-  console.log(Type);
+  console.log(id);
   useEffect(() => {
     if (Type == "AJOUTER_DEPARTEMENT") {
       setTitle("Ajouter un département");
-      setRetour(<Ajouterdep handleSubmit={handleSubmit}
-        handleChange={handleChange}
-        errors={errors}
-        departement={departement} id={id}/>);
+      /*setRetour(
+        <Ajouterdep
+          handleSubmit={handleSubmit}
+          handleChange={handleChange}
+          errors={errors}
+          departement={departement}
+          id={id}
+        />
+      );*/
     } else if (Type == "MODIFIER_DEPARTEMENT" && id != 0) {
-    
       setTitle("Modifier un département");
       fetchDepartement(id);
-      setRetour(<Ajouterdep handleSubmit={handleSubmit}
-        handleChange={handleChange}
-        errors={errors}
-        departement={departement}
-        id={id}/>);
+      /* setRetour(
+        <Ajouterdep
+          handleSubmit={handleSubmit}
+          handleChange={handleChange}
+          errors={errors}
+          departement={departement}
+          id={id}
+        />
+      );*/
     } else if (Type == "SUPPRIMER_DEPARTEMENT" && id != 0) {
       setTitle("Modifier un département");
     }
@@ -69,14 +77,31 @@ const Modal = ({ isOpened, onClose, Type, id }) => {
     var apiError = {};
     try {
       if (id != 0) {
+        console.log(id);
         const response = await axios.put(
           "http://localhost:8000/api/departements/" + id,
           departement
         );
-        console.log(response.data);
+        let mon_id = 0;
+        //   console.log(typeof tables[0].Nom)
+        for (var i = 0; i < tables.length; i++) {
+          if (response.data.Nom == tables[i].Nom) {
+            mon_id = i;
+          }
+        }
+        tables[mon_id].Nom = departement.Nom;
+
+        //----------------------------------------------------- AJOUT DU DEPARTEMENT -----------------------------------------------------
       } else {
-        await axios.post("http://localhost:8000/api/departements", departement);
+        const response = await axios.post(
+          "http://localhost:8000/api/departements",
+          departement
+        );
+        const { id, Nom } = response.data;
+        tables.push({ id, Nom });
+        setTables(tables);
       }
+
       setDepartement({ Nom: "" });
     } catch (error) {
       error.response.data.violations.forEach((violation) => {
@@ -89,14 +114,13 @@ const Modal = ({ isOpened, onClose, Type, id }) => {
       setError({ Nom: "" });
     }
   };
-  const onRemove = async(event) => {
-      try{
-          await axios.delete("http://localhost:8000/api/departements/"+id)
-          onClose()
-      }catch(error){
-          console.log("erreur")
-      }
-    
+  const onRemove = async (event) => {
+    try {
+      await axios.delete("http://localhost:8000/api/departements/" + id);
+      onClose();
+    } catch (error) {
+      console.log("erreur");
+    }
   };
   return createPortal(
     <div className="overlay">
@@ -114,7 +138,13 @@ const Modal = ({ isOpened, onClose, Type, id }) => {
           <h5 className="modal-title">{title}</h5>
         </div>
         <div className="modal-body">
-            {retour}
+          <Ajouterdep
+            handleSubmit={handleSubmit}
+            handleChange={handleChange}
+            errors={errors}
+            departement={departement}
+            id={id}
+          />
         </div>
       </div>
     </div>,
