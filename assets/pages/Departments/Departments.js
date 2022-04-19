@@ -1,101 +1,108 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./departments.css";
+import Deletedep from "./Deletedep";
+import axios from "axios";
 import Title from "../../Components/title/Title";
+import { Link } from "react-router-dom";
+import { HiDotsVertical } from "react-icons/hi";
+import table from "../../styles/table.css";
+import Modal from "../../Components/modal/Modal";
+
+import { registry } from "chart.js";
+import "../../Components/modal/Modal"
+
+
+
+
 
 const Departments = () => {
+  const [depid, setDepid] = useState(0);
+  const [isModalOpened,setIsModalOpened]=useState(false)
+  const [departements, setDepartements] = useState([]);
+  const [launch,setLaunch]=useState(false)
+  const [type, setType] = useState("");
+  useEffect(() => {
+    axios
+      .get("http://localhost:8000/api/departements")
+      .then((response) => response.data["hydra:member"])
+      .then((data) => setDepartements(data));
+  }, []);
+
   return (
-    <div className="departments">
-      <div className="head">
-        <Title
-          nomdepage={"Departements"}
-          subname={"Departements"}
-          buttonValue={"Ajouter un département"}
-        />
-        <table>
-          <thead>
-            <tr>
-              <th>Header 1</th>
-              <th>Header 2</th>
-              <th>Header 3</th>
-              <th>Header 4</th>
-              <th>Header 5</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Content 1</td>
-              <td>Content 1</td>
-              <td>Content 1</td>
-              <td>Content 1</td>
-              <td>Content 1</td>
-            </tr>
-            <tr>
-              <td>Content 2</td>
-              <td>Content 2</td>
-              <td>Content 2</td>
-              <td>Content 2</td>
-              <td>Content 2</td>
-            </tr>
-            <tr>
-              <td>Content 3</td>
-              <td>Content 3</td>
-              <td>Content 3</td>
-              <td>Content 3</td>
-              <td>Content 3</td>
-            </tr>
-            <tr>
-              <td>Content 4</td>
-              <td>Content 4</td>
-              <td>Content 4</td>
-              <td>Content 4</td>
-              <td>Content 4</td>
-            </tr>
-            <tr>
-              <td>Content 5</td>
-              <td>Content 5</td>
-              <td>Content 5</td>
-              <td>Content 5</td>
-              <td>Content 5</td>
-            </tr>
-            <tr>
-              <td>Content 6</td>
-              <td>Content 6</td>
-              <td>Content 6</td>
-              <td>Content 6</td>
-              <td>Content 6</td>
-            </tr>
-            <tr>
-              <td>Content 7</td>
-              <td>Content 7</td>
-              <td>Content 7</td>
-              <td>Content 7</td>
-              <td>Content 7</td>
-            </tr>
-            <tr>
-              <td>Content 8</td>
-              <td>Content 8</td>
-              <td>Content 8</td>
-              <td>Content 8</td>
-              <td>Content 8</td>
-            </tr>
-            <tr>
-              <td>Content 9</td>
-              <td>Content 9</td>
-              <td>Content 9</td>
-              <td>Content 9</td>
-              <td>Content 9</td>
-            </tr>
-            <tr>
-              <td>Content 10</td>
-              <td>Content 10</td>
-              <td>Content 10</td>
-              <td>Content 10</td>
-              <td>Content 10</td>
-            </tr>
-          </tbody>
-        </table>
+    <>
+      <div className="departments">
+        <div className="head">
+          <div className="left_part">
+            <h3>Dashboard</h3>
+            <div className="body_header">
+              <ul>
+                <li>
+                  <Link to="/">Tableau de Bord /</Link>
+                  <span> Employée</span>
+                </li>
+              </ul>
+              <div className="right_part">
+                <button
+                  onClick={() => {
+                    setDepid(0);
+                    setIsModalOpened(true);
+                    setType("AJOUTER_DEPARTEMENT")
+                  }}
+                >
+                  Ajouter un département
+                </button>
+              </div>
+            </div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Departements</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {departements.map((departement) => (
+                <tr key={departement.id}>
+                  <td>{departement.id}</td>
+                  <td>{departement.Nom}</td>
+                  <td>
+                    <div className="form-group-button">
+                      <button
+                        className="info"
+                        onClick={() => {
+                          setDepid(departement.id);
+                          setIsModalOpened(true);
+                          setType("MODIFIER_DEPARTEMENT")
+                          setLaunch(true)
+                        }}
+                        id={departement.id}
+                      >
+                        Modifier
+                      </button>
+                      <button
+                        className="danger"
+                        onClick={() => {
+                          setIsModalOpened(true)
+                          setDepid(departement.id);
+                          setType("SUPPRIMER_DEPARTEMENT")
+                        }}
+                        id={departement.id}
+                      >
+                        Supprimer
+                      </button>
+                    </div>
+                    <span></span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
+ <Modal isOpened={isModalOpened} onClose={()=>setIsModalOpened(false)} Type={type} id={depid}/>
+    </>
   );
 };
 

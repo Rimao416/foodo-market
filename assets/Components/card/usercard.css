@@ -9,7 +9,7 @@
     border-radius: 4px;
     margin-bottom: 30px;
     display: inline-block;
-    padding: 20px;
+ 
     text-align: center;
     position: relative;
     box-shadow: 0 1px 1px #0003;
@@ -17,6 +17,7 @@
     margin-left: 20px;
 }
 .card_user .profile_user{
+    margin-top: 5%;
     margin-bottom: 10px;
     transition: .5s ease-in-out;
 }

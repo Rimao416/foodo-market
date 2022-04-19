@@ -1,0 +1,47 @@
+/*Configuration des buttons*/
+
+button.form-first {
+  background-color: #ff9b44;
+  color: #fff;
+  font-family: 13px Poppins;
+  font-weight: 500;
+  padding: 6px 12px;
+  border-radius: 50px;
+}
+
+button.form-first:hover {
+  background-color: #ff851a;
+  border: 1px solid #ff851a;
+  color: #fff;
+}
+
+button.form-green {
+  outline: none;
+  font-family: Roboto;
+  font-weight: 500;
+  border: none;
+  border-radius: 10px;
+  background: #4ab657;
+  border: 1px solid #4ab657;
+  color: #fff;
+}
+
+button.btn-danger,
+button.btn-info {
+  border: none;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 25px;
+  font-weight: 500;
+  border-radius: 4px;
+  box-shadow: 0 1px 1px #0003;
+  transition: .4s;
+}
+
+button.btn-danger {
+  background-color: #B22222;
+}
+
+button.btn-info {
+  background-color: #483D8B;
+}

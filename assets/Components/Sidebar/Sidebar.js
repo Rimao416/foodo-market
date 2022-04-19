@@ -1,9 +1,17 @@
 import { Link } from "react-router-dom";
-import React from 'react'
+import React,{useContext} from 'react'
+import authApi from "../../services/authApi";
 import "./Sidebar.css";
+import AuthContext from "../../contexts/AuthContext";
 
 
-export default function Sidebar() {
+export default function Sidebar({history}) { 
+  const {isAuthenticated, setIsAuthenticated}=useContext(AuthContext)
+  const handleLogout=()=>{
+    authApi.logout()
+    setIsAuthenticated(false)
+    history.push('/login')
+  }
   return (
     <div className="sidebar">
       <div className="sidebarWrapper">
@@ -67,8 +75,8 @@ export default function Sidebar() {
             <li className="sidebarListItem">
               Analytics
             </li>
-            <li className="sidebarListItem">
-              Reports
+            <li onClick={handleLogout} className="sidebarListItem">
+              Logout
             </li>
           </ul>
         </div>

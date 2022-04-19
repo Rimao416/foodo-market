@@ -1,0 +1,32 @@
+table{
+    /*  display: grid;*/
+  /*    height: 100vh;*/
+      margin-top: 3%;
+      width: 95%;
+      border-collapse: collapse;
+      box-shadow: 0 5px 10px #e1e5ee;
+      background-color: white;
+      text-align: center;
+      overflow: hidden;
+      border: 1px solid #ededed;
+  
+  
+  }
+  thead{
+      box-shadow: 0 5px 10px #e1e5ee;
+  }
+  thead th{
+      padding: 1rem 2rem;
+      text-transform: uppercase;
+      font-size: 15px;
+      font-weight: 600;
+      color: #333;
+      
+  }
+  tbody td{
+      padding: 1rem 2rem;
+      color: #212529;
+  }
+  tbody tr:nth-child(even){
+      background-color: rgb(233,233,233);
+  }

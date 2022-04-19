@@ -1,61 +1,84 @@
-import React from "react";
+import React, { useState,useContext } from "react";
 import "./Login.css";
-export default function Login() {
+import authApi from "../../services/authApi";
+import AuthContext from "../../contexts/AuthContext";
+export default function Login({history}) {
+  const {setIsAuthenticated}=useContext(AuthContext)
+  const [credentials, setCredentails] = useState({
+    username: "",
+    password: "",
+  });
+  const [error, setError]=useState("")
+  const handleChange=(event)=>{
+    const value=event.currentTarget.value
+    const name=event.currentTarget.name
+    setCredentails({...credentials,[name]:value})
+  }
+  const handleSubmit=async (event)=>{
+    event.preventDefault()
+    try{
+      await authApi.authenticate(credentials)
+      setError(" ")
+      setIsAuthenticated(true)
+      history.replace("/employee")
+
+    }catch(error){
+      console.log(error.response)
+      setError("Aucun compte ne possède ces coordonnées")
+    }
+  }
   return (
     <>
-      <div className="login">
-        <div className="login-wrap">
-          <div className="login-html">
-            <input
-              id="tab-1"
-              type="radio"
-              name="tab"
-              className="sign-in"
-              checked
-            />
-            <label htmlFor="tab-1" className="tab">
-              Connexion
-            </label>
-            <input id="tab-2" type="radio" name="tab" className="sign-up" />
-            <label for="tab-2" className="tab"></label>
-            <div className="login-form">
-              <div className="sign-in-htm">
-                <div className="group">
-                  <label htmlFor="user" className="label">
-                    Adresse Mail
-                  </label>
-                  <input id="user" type="text" className="input" />
-                </div>
-                <div className="group">
-                  <label htmlFor="pass" className="label">
-                    Mot de passe
-                  </label>
-                  <input
-                    id="pass"
-                    type="password"
-                    className="input"
-                    data-type="password"
-                  />
-                </div>
-                <div className="group">
-                  <input id="check" type="checkbox" className="check" checked />
-                  <label htmlFor="check">
-                    <span className="icon"></span> Me garder connecter
-                  </label>
-                </div>
-                <div className="group">
-                  <input
-                    type="submit"
-                    className="button"
-                    value="Connectez-vous"
-                  />
-                </div>
-                <div className="hr"></div>
-                <div className="foot-lnk">
-                  <a href="#forgot">Mot de passe oublié</a>
+      <div className="limiter">
+        <div className="container-login100">
+          <div className="wrap-login100">
+            <div className="login100-form-title">
+              <span className="login100-form-title-1">Sign In</span>
+            </div>
+            {error && <div className="error"><p>{error}</p></div>}
+            <form className="login100-form validate-form" onSubmit={handleSubmit}>
+              <div className="wrap-input100 validate-input m-b-26">
+                <span className="label-input100">Username</span>
+                <input
+                  defaultValue={credentials.username}
+                  onChange={handleChange}
+                  className="input100"
+                  type="email"
+                  name="username"
+                  id="username"
+                  required
+                  placeholder="Entrer votre mail"
+                />
+                <span className="focus-input100"></span>
+              </div>
+
+              <div className="wrap-input100 validate-input m-b-18">
+                <span className="label-input100">Password</span>
+                <input
+                  defaultValue={credentials.password}
+                  onChange={handleChange}
+                  className="input100"
+                  type="password"
+                  name="password"
+                  id="password"
+                  required
+                  placeholder="Entrez votre mot de passe"
+                />
+                <span className="focus-input100"></span>
+              </div>
+
+              <div className="password_forgot">
+                <div>
+                  <a href="#" className="txt1">
+                    Mot de passe Oublié
+                  </a>
                 </div>
               </div>
-            </div>
+
+              <div className="container-login100-form-btn">
+                <button type="submit" className="login100-form-btn">Connexion</button>
+              </div>
+            </form>
           </div>
         </div>
       </div>

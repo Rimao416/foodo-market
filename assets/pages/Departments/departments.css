@@ -1,6 +1,34 @@
 .departments{
     flex: 4;
 }
+
 .departments .head{
     margin-left: 20px;
 }
+.departments.active{
+    transition: .3s;
+    filter: blur(2px);
+}
+/*MODAL HERE*/
+.modal-body input, .modal-body input:focus, .modal-body input:active{
+    border: 1px solid rgba(0,0,0,0.1);
+    width: 100%;
+}
+.modal-body input:focus{
+    background-color: rgba(0,0,0,0.1);
+}
+
+
+.submit-section{
+    margin: 40px 0px 0px;
+    text-align: center;
+}
+.submit-section .form-first{
+    padding: 10px 20px;
+    font-size: 15px;
+    font-weight: 600;
+}/*
+.modal.active{
+    margin-top:5%;
+    display: block;
+}*/

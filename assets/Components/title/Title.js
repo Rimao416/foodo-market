@@ -1,7 +1,12 @@
-import React from "react";
+import React,{useState} from "react";
 import { Link } from "react-router-dom";
 import "./title.css";
+import {Mechange,getModal,changeMoi} from '../../services/titleService'
 const Title = ({ nomdepage, subname, buttonValue }) => {
+
+const [maValeur,setMaValeur]=useState(false)
+
+
   return (
     <>
       <div className="left_part">
@@ -18,10 +23,11 @@ const Title = ({ nomdepage, subname, buttonValue }) => {
             </li>
           </ul>
           <div className="right_part">
-            <button>{buttonValue}</button>
+            <button onClick={()=>Mechange()}>{buttonValue}</button>
           </div>
         </div>
       </div>
+      {getModal(nomdepage)}
     </>
   );
 };
