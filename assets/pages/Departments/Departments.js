@@ -12,6 +12,7 @@ import { registry } from "chart.js";
 import "../../Components/modal/Modal";
 
 const Departments = () => {
+  var i=0;
   const [depid, setDepid] = useState(0);
   const [isModalOpened, setIsModalOpened] = useState(false);
   const [departements, setDepartements] = useState([]);
@@ -61,7 +62,7 @@ const Departments = () => {
             <tbody>
               {departements.map((departement) => (
                 <tr key={departement.id}>
-                  <td>{departement.id}</td>
+                  <td>{i++}</td>
                   <td>{departement.Nom}</td>
                   <td>
                     <div className="form-group-button">

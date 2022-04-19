@@ -20,7 +20,6 @@ const Modal = ({ isOpened, onClose, Type, id, tables, setTables }) => {
   });
   const [title, setTitle] = useState("Ajouter un département");
   const [retour, setRetour] = useState(<></>);
-  console.log(id);
   useEffect(() => {
     if (Type == "AJOUTER_DEPARTEMENT") {
       setTitle("Ajouter un département");
@@ -77,19 +76,25 @@ const Modal = ({ isOpened, onClose, Type, id, tables, setTables }) => {
     var apiError = {};
     try {
       if (id != 0) {
-        console.log(id);
+        var stop = false;
+        var i = 0;
         const response = await axios.put(
           "http://localhost:8000/api/departements/" + id,
           departement
         );
-        let mon_id = 0;
-        //   console.log(typeof tables[0].Nom)
-        for (var i = 0; i < tables.length; i++) {
-          if (response.data.Nom == tables[i].Nom) {
-            mon_id = i;
-          }
+        var mon_id = 0;
+        /*tables.map((t)=>{
+            if(t.Nom=)
+        })*/
+        /*
+        for(i=0;i<tables.length;i++){
+            if((tables[i].Nom == response.data.Nom)){
+                mon_id=i
+            }
         }
-        tables[mon_id].Nom = departement.Nom;
+        console.log(mon)*/
+
+        tables = "BG";
 
         //----------------------------------------------------- AJOUT DU DEPARTEMENT -----------------------------------------------------
       } else {
@@ -114,9 +119,13 @@ const Modal = ({ isOpened, onClose, Type, id, tables, setTables }) => {
       setError({ Nom: "" });
     }
   };
+
+  //LA SUPPRESSION MARCHE A MERVEILLES
   const onRemove = async (event) => {
+      console.log(id)
     try {
-      await axios.delete("http://localhost:8000/api/departements/" + id);
+      const response=await axios.delete("http://localhost:8000/api/departements/" + id)
+      setTables(tables.filter(table =>table.id != id))
       onClose();
     } catch (error) {
       console.log("erreur");
@@ -138,13 +147,15 @@ const Modal = ({ isOpened, onClose, Type, id, tables, setTables }) => {
           <h5 className="modal-title">{title}</h5>
         </div>
         <div className="modal-body">
-          <Ajouterdep
-            handleSubmit={handleSubmit}
-            handleChange={handleChange}
-            errors={errors}
-            departement={departement}
-            id={id}
-          />
+          <h6>Voulez vous réellement supprimer cet élément</h6>
+          <div className="form-flex-button">
+            <button className="btn-info" onClick={() => onClose()}>
+              Annuler
+            </button>
+            <button className="btn-danger" onClick={() => onRemove()}>
+              Supprimer
+            </button>
+          </div>
         </div>
       </div>
     </div>,
