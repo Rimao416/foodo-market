@@ -1,16 +1,10 @@
 import React, { useState, useEffect } from "react";
 import "./departments.css";
-import Deletedep from "./Deletedep";
 import axios from "axios";
-import Title from "../../Components/title/Title";
 import { Link } from "react-router-dom";
 import { HiDotsVertical } from "react-icons/hi";
-import table from "../../styles/table.css";
 import Modal from "../../Components/modal/Modal";
-
-import { registry } from "chart.js";
-import "../../Components/modal/Modal";
-
+import '../../styles/table.css'
 const Departments = () => {
   var i=0;
   const [depid, setDepid] = useState(0);
@@ -60,7 +54,7 @@ const Departments = () => {
               </tr>
             </thead>
             <tbody>
-              {departements.map((departement) => (
+              {departements.map(departement => 
                 <tr key={departement.id}>
                   <td>{i++}</td>
                   <td>{departement.Nom}</td>
@@ -93,7 +87,7 @@ const Departments = () => {
                     <span></span>
                   </td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>

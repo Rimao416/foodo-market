@@ -4,10 +4,10 @@ export default function Ajouterdep ({handleSubmit,handleChange,errors,departemen
   return (
     <>
        <form className="form" onSubmit={handleSubmit}>
-            <label htmlFor="departement">Entrer le nom du département</label>
+            <label htmlFor="departement" className="label-input">Entrer le nom du département</label>
             <input
               type="text"
-              className={errors.Nom.length > 0 && "is-invalid"}
+              className={errors.Nom.length > 0 ? "is-invalid": ""}
               placeholder="ex. Departement 655"
               name="Nom"
               defaultValue={departement.Nom}

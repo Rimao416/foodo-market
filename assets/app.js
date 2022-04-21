@@ -12,6 +12,7 @@ import Login from "./pages/Login/Login";
 import Home from "./pages/Home/Home";
 import Topbar from "./Components/topbar/Topbar";
 import Sidebar from "./Components/Sidebar/Sidebar";
+import Poste from "./pages/Poste/Poste";
 import Employee from "./pages/Employee/Employee";
 import Departments from "./pages/Departments/Departments";
 import AuthContext from "./contexts/AuthContext"
@@ -39,8 +40,9 @@ const App = () => {
           <div className="container">
             <SideBardWithRouter/>
             <Route path="/" exact component={Home} />
-            <Route path="/employee" exact component={Employee} />
             <Route path="/departments" exact component={Departments} />
+            <Route path="/postes" exact component={Poste} />
+            <Route path="/employee" exact component={Employee} />
           </div>
         </>
       </Switch>

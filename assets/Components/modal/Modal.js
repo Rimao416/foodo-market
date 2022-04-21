@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import "./modal.css";
-import "../../styles/input.css";
-import "../../styles/button.css";
+/*import "../../styles/input.css";
+import "../../styles/button.css";*/
 import axios from "axios";
 import { BiX } from "react-icons/bi";
 import Ajouterdep from "../forms/Ajouterdep";
