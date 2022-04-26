@@ -1,50 +1,37 @@
 import React, { useState, useEffect } from "react";
 import "./departments.css";
-import axios from "axios";
+import departementApi from "../../services/departementApi";
 import { Link } from "react-router-dom";
+import Title from "../../Components/title/Title";
 import { HiDotsVertical } from "react-icons/hi";
 import Modal from "../../Components/modal/Modal";
-import '../../styles/table.css'
+import "../../styles/table.css";
 const Departments = () => {
-  var i=0;
+  var i = 1;
   const [depid, setDepid] = useState(0);
   const [isModalOpened, setIsModalOpened] = useState(false);
   const [departements, setDepartements] = useState([]);
   const [launch, setLaunch] = useState(false);
   const [type, setType] = useState("");
   useEffect(() => {
-    axios
-      .get("http://localhost:8000/api/departements")
-      .then((response) => response.data["hydra:member"])
-      .then((data) => setDepartements(data));
+    departementApi.findAll().then((data) => setDepartements(data));
   }, []);
 
   return (
     <>
       <div className="departments">
         <div className="head">
-          <div className="left_part">
-            <h3>Dashboard</h3>
-            <div className="body_header">
-              <ul>
-                <li>
-                  <Link to="/">Tableau de Bord /</Link>
-                  <span> Employée</span>
-                </li>
-              </ul>
-              <div className="right_part">
-                <button
-                  onClick={() => {
-                    setDepid(0);
-                    setIsModalOpened(true);
-                    setType("AJOUTER_DEPARTEMENT");
-                  }}
-                >
-                  Ajouter un département
-                </button>
-              </div>
-            </div>
-          </div>
+          <Title nomdepage="Dashboard" subname="Departements">
+            <button
+              onClick={() => {
+                setDepid(0);
+                setIsModalOpened(true);
+                setType("AJOUTER_DEPARTEMENT");
+              }}
+            >
+              Ajouter un département
+            </button>
+          </Title>
           <table>
             <thead>
               <tr>
@@ -54,7 +41,7 @@ const Departments = () => {
               </tr>
             </thead>
             <tbody>
-              {departements.map(departement => 
+              {departements.map((departement) => (
                 <tr key={departement.id}>
                   <td>{i++}</td>
                   <td>{departement.Nom}</td>
@@ -87,7 +74,7 @@ const Departments = () => {
                     <span></span>
                   </td>
                 </tr>
-              )}
+              ))}
             </tbody>
           </table>
         </div>
@@ -102,5 +89,5 @@ const Departments = () => {
       />
     </>
   );
-}
+};
 export default Departments;

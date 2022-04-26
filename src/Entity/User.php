@@ -61,6 +61,12 @@ class User implements UserInterface
      */
     private $comeAt;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Poste::class, inversedBy="users")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $poste;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -198,6 +204,18 @@ class User implements UserInterface
     public function setComeAt(\DateTimeInterface $comeAt): self
     {
         $this->comeAt = $comeAt;
+
+        return $this;
+    }
+
+    public function getPoste(): ?Poste
+    {
+        return $this->poste;
+    }
+
+    public function setPoste(?Poste $poste): self
+    {
+        $this->poste = $poste;
 
         return $this;
     }

@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Core\Annotation\ApiSubresource;
 
 /**
  * @ApiResource(
@@ -24,7 +25,7 @@ class Departement
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"departements_read"})
+     * @Groups({"departements_read","postes_read"})
      */
     private $id;
 
@@ -36,6 +37,8 @@ class Departement
     private $Nom;
 
     /**
+     * @Groups({"departtements_read"})
+     * @ApiSubresource
      * @ORM\OneToMany(targetEntity=Poste::class, mappedBy="departement")
      */
     private $postes;

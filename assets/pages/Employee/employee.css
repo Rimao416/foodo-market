@@ -31,6 +31,24 @@
 }
  .search_control input,  .search_control button{
     margin-left: 20px;
-    width: 22%;
+    width: 20%;
+    display: inline;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    font-weight: 400;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: .25rem;
+}
+.search_control button{
     height: 39px;
+}
+.search_control input{
+    height: 30px;
+}
+.search_control input:focus{
+    width: 20%;
+    display: inline;
 }

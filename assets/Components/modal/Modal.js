@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import "./modal.css";
+import departementApi from "../../services/departementApi";
 /*import "../../styles/input.css";
 import "../../styles/button.css";*/
-import axios from "axios";
 import { BiX } from "react-icons/bi";
 import Ajouterdep from "../forms/Ajouterdep";
 import Supprimerdep from "../forms/Supprimerdep";
@@ -27,11 +27,12 @@ const Modal = ({ isOpened, onClose, Type, id, tables, setTables }) => {
       <Supprimerdep onClose={onClose} onRemove={onRemove}/>
       setRetour(
         <Ajouterdep
-          handleSubmit={handleSubmit}
-          handleChange={handleChange}
-          errors={errors}
-          departement={departement}
-          id={id}
+            handleSubmit={handleSubmit}
+            handleChange={handleChange}
+            errors={errors}
+            departement={departement}
+            id={id}
+          />
         />
       );*/
     } else if (Type == "MODIFIER_DEPARTEMENT" && id != 0) {
@@ -52,10 +53,8 @@ const Modal = ({ isOpened, onClose, Type, id, tables, setTables }) => {
   }, [id]);
   const fetchDepartement = async (id) => {
     try {
-      const data = await axios
-        .get(`http://localhost:8000/api/departements/` + id)
-        .then((response) => response.data);
-      const { Nom } = data;
+      const { Nom } = await departementApi.find(id);
+     // const { Nom } = data;
       setDepartement({ Nom });
     } catch (error) {
       console.log("Une erreur");
@@ -79,26 +78,20 @@ const Modal = ({ isOpened, onClose, Type, id, tables, setTables }) => {
     var apiError = {};
     try {
       if (id != 0) {
-        await axios.put(
-          "http://localhost:8000/api/departements/" + id,
-          departement
-        );
-        tables.map((t)=>{
-            if(t.id==id){
-                t.Nom=departement.Nom
-            }
-        })
+        await departementApi.update(id,departement)
+        tables.map((t) => {
+          if (t.id == id) {
+            t.Nom = departement.Nom;
+          }
+        });
         //----------------------------------------------------- AJOUT DU DEPARTEMENT -----------------------------------------------------
-      } else if(id==0) {
-        const response = await axios.post(
-          "http://localhost:8000/api/departements",
-          departement
-        );
+      } else if (id == 0) {
+        const response = await departementApi.create(departement)
         const { id, Nom } = response.data;
         tables.push({ id, Nom });
         setTables(tables);
       }
-      
+
       setDepartement({ Nom: "" });
     } catch (error) {
       error.response.data.violations.forEach((violation) => {
@@ -116,14 +109,12 @@ const Modal = ({ isOpened, onClose, Type, id, tables, setTables }) => {
   const onRemove = async (event) => {
     console.log(id);
     try {
-      const response = await axios.delete(
-        "http://localhost:8000/api/departements/" + id
-      );
-      setTables(tables.filter((table) => table.id != id));
-      onClose();
+      await departementApi.delete(id);
     } catch (error) {
-      console.log("erreur");
+      console.log("Une erreur au niveau de la suppression");
     }
+    setTables(tables.filter((table) => table.id != id));
+    onClose();
   };
   return createPortal(
     <div className="overlay">

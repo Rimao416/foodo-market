@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { BiX } from "react-icons/bi";
 import { createPortal } from "react-dom";
 import "./modal.css";
-import axios from "axios";
+import postApi from "../../services/postApi";
+import departementApi from "../../services/departementApi";
 import Ajouterpost from "../forms/Ajouterpost";
 import Supprimerpost from "../forms/Supprimerpost";
 const Postmodal = ({ isOpened, onClose, Type, id, tables, setTables }) => {
@@ -31,10 +32,7 @@ const Postmodal = ({ isOpened, onClose, Type, id, tables, setTables }) => {
   };
   const fetchPoste = async (id) => {
     try {
-      const data = await axios
-        .get("http://localhost:8000/api/postes/" + id)
-        .then((response) => response.data);
-      const { Designation, departement } = data;
+      const { Designation, departement } = await postApi.find(id);
       var mondepartement = departement.Nom;
       console.log({ Designation, mondepartement });
       setPoste({ designation: Designation, departement: mondepartement });
@@ -45,9 +43,8 @@ const Postmodal = ({ isOpened, onClose, Type, id, tables, setTables }) => {
 
   const fetchDepartements = async () => {
     try {
-      const data = await axios
-        .get("http://localhost:8000/api/departements")
-        .then((response) => response.data["hydra:member"])
+      const data = await departementApi
+        .findAll()
         .then((data) => setDepartements(data));
     } catch (error) {
       console.log(error.response);
@@ -64,15 +61,11 @@ const Postmodal = ({ isOpened, onClose, Type, id, tables, setTables }) => {
     try {
       /*****************************************MMODIFICATION DU POSTE***************************** */
       if (id != 0) {
-        const response = await axios.put(
-          "http://localhost:8000/api/postes/" + id,
-          {
-            Designation: poste.designation,
-            departement: `/api/departements/${poste.departement}`,
-          }
+        const response = await postApi.update(
+          id,
+          poste.designation,
+          poste.departement
         );
-        console.log(response);
-        console.log(tables);
         tables.map((t) => {
           if (t.id == id) {
             t.Designation = poste.designation;
@@ -81,10 +74,10 @@ const Postmodal = ({ isOpened, onClose, Type, id, tables, setTables }) => {
         });
         //*****************************************AJOUT DU POSTE****************************** */
       } else if (id == 0) {
-        const response = await axios.post("http://localhost:8000/api/postes", {
-          Designation: poste.designation,
-          departement: `/api/departements/${poste.departement}`,
-        });
+        const response = await postApi.create(
+          poste.designation,
+          poste.departement
+        );
         const { id, Designation, departement } = response.data;
         var Nom = departement.Nom;
         tables.push({
@@ -109,12 +102,10 @@ const Postmodal = ({ isOpened, onClose, Type, id, tables, setTables }) => {
       setErrors({ Designation: "" });
     }
   };
-
+  /***********************************SUPPRESSION DU POSTE ************************** */
   const onRemove = async (event) => {
     try {
-      const response = await axios.delete(
-        "http://localhost:8000/api/postes/" + id
-      );
+      const response = await postApi.delete(id);
       setTables(tables.filter((table) => table.id != id));
       onClose();
     } catch (error) {

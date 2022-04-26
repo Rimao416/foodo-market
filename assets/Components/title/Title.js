@@ -2,7 +2,7 @@ import React,{useState} from "react";
 import { Link } from "react-router-dom";
 import "./title.css";
 import {Mechange,getModal,changeMoi} from '../../services/titleService'
-const Title = ({ nomdepage, subname, buttonValue }) => {
+const Title = ({ nomdepage, subname, children }) => {
 
 const [maValeur,setMaValeur]=useState(false)
 
@@ -23,7 +23,7 @@ const [maValeur,setMaValeur]=useState(false)
             </li>
           </ul>
           <div className="right_part">
-            <button onClick={()=>Mechange()}>{buttonValue}</button>
+            {children}
           </div>
         </div>
       </div>

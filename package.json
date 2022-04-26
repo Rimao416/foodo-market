@@ -17,6 +17,9 @@
         "build": "encore production --progress"
     },
     "dependencies": {
+        "@dicebear/avatars": "^4.10.2",
+        "@dicebear/avatars-initials-sprites": "^4.10.2",
+        "@dicebear/avatars-male-sprites": "^4.10.2",
         "axios": "^0.26.1",
         "chart.js": "^3.7.1",
         "echarts-for-react": "^3.0.2",

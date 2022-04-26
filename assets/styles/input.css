@@ -1,4 +1,4 @@
-label {
+.modal label {
     font-family: Roboto;
     color: #333;
     letter-spacing: 0.1px;
@@ -6,12 +6,12 @@ label {
     font-size: 15px;
 }
 
-input.is-invalid {
+.modal input.is-invalid {
     background-color: rgba(255, 0, 0, .2);
 }
 
-input,
-input:focus {
+.modal input,
+.modal input:focus {
     display: block;
     width: 94%;
     padding: .375rem .75rem;
@@ -28,12 +28,12 @@ input:focus {
     border-radius: .25rem;
 }
 
-input:focus {
+.modal input:focus {
     border: 1px solid red;
     background-color: #ced4da;
 }
 
-select.form-select {
+.modal select.form-select {
     display: block;
     width: 100%;
     padding: .375rem 2.25rem .375rem .75rem;
