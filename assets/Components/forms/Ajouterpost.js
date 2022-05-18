@@ -5,7 +5,7 @@ const Ajouterpost = ({ handleSubmit, handleChange, errors, poste, id,departement
     <>
       <form className="form" onSubmit={handleSubmit}>
         <label htmlFor="departement" className="label-input">
-          Entrer le nom du Poste
+          Entrer le nom du Poste 
         </label>
 
         <input
@@ -27,7 +27,7 @@ const Ajouterpost = ({ handleSubmit, handleChange, errors, poste, id,departement
           value={poste.departement}
           onChange={handleChange}
         >
-          <option value="">----------------------------</option>
+         <option value="">--------------------------------</option>
           {departements.map((departement) => (
             <option key={departement.id} value={departement.id}>
               {departement.Nom}

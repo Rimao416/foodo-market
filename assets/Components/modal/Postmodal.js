@@ -6,10 +6,12 @@ import postApi from "../../services/postApi";
 import departementApi from "../../services/departementApi";
 import Ajouterpost from "../forms/Ajouterpost";
 import Supprimerpost from "../forms/Supprimerpost";
-const Postmodal = ({ isOpened, onClose, Type, id, tables, setTables }) => {
+import { toast } from "react-toastify";
+const Postmodal = ({ isOpened, onClose, Type, id, tables, setTables,setDepid}) => {
   const [errors, setErrors] = useState({
     Designation: "",
   });
+  console.log("L'id est "+id)
 
   const [poste, setPoste] = useState({
     designation: "",
@@ -20,6 +22,7 @@ const Postmodal = ({ isOpened, onClose, Type, id, tables, setTables }) => {
   }, []);
   useEffect(() => {
     if (id != 0) {
+      console.log("Salut je me lance")
       fetchPoste(id);
     }
   }, [id]);
@@ -45,7 +48,7 @@ const Postmodal = ({ isOpened, onClose, Type, id, tables, setTables }) => {
     try {
       const data = await departementApi
         .findAll()
-        .then((data) => setDepartements(data));
+        setDepartements(data) 
     } catch (error) {
       console.log(error.response);
     }
@@ -88,8 +91,11 @@ const Postmodal = ({ isOpened, onClose, Type, id, tables, setTables }) => {
           },
         });
         setTables(tables);
+        toast.success("Le poste est ajouté avec succèss")
       }
+     // setPoste({...poste,departement:data[0].id})
       setPoste({ designation: "" });
+      setDepid(0)
       //      onClose()
     } catch (error) {
       error.response.data.violations.forEach((violation) => {
@@ -107,6 +113,8 @@ const Postmodal = ({ isOpened, onClose, Type, id, tables, setTables }) => {
     try {
       const response = await postApi.delete(id);
       setTables(tables.filter((table) => table.id != id));
+      setPoste({ designation: "" });
+      setDepid(0)
       onClose();
     } catch (error) {
       console.log("erreur");

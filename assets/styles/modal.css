@@ -12,7 +12,7 @@
     border-radius: .3rem;
     outline: 0;
     display: block;
-
+    z-index: 999;
 }
 .modal #cross{
     position: relative;

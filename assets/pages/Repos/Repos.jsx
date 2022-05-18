@@ -1,88 +1,84 @@
 import React, { useState, useEffect } from "react";
-import "./departments.css";
-import departementApi from "../../services/departementApi";
-import { Link } from "react-router-dom";
-import Title from "../../Components/title/Title";
-import { HiDotsVertical } from "react-icons/hi";
-import Modal from "../../Components/modal/Modal";
-import "../../styles/table.css";
+import ModalFerie from "../../Components/modal/ModalFerie";
 import TableLoader from "../../Components/loaders/TableLoader";
+import Title from "../../Components/title/Title";
+import moment from "moment";
+import "./repos.css";
+import axios from "axios";
 import { toast } from "react-toastify";
-const Departments = () => {
-  var i = 1;
+const Repos = () => {
   const [depid, setDepid] = useState(0);
   const [isModalOpened, setIsModalOpened] = useState(false);
-  const [departements, setDepartements] = useState([]);
-  const [launch, setLaunch] = useState(false);
-  const [type,setType]=useState("")
   const [loading, setLoading] = useState(true);
-
-  const fetchDepartements = async () => {
+  const [repos, setRepos] = useState([]);
+  const [type, setType] = useState("");
+  const fetchRepos = async () => {
     try {
-      const data = await departementApi
-        .findAll()
-        .then((data) => setDepartements(data));
+      const response = await axios
+        .get("http://localhost:8000/api/repos")
+        .then((response) => response.data["hydra:member"]);
+      setRepos(response);
+      console.log(response);
       setLoading(false);
     } catch (error) {
-      toast.error("Erreur lors du chargement des données")
+      toast.error("Erreur lors du chargement des données");
     }
   };
   useEffect(() => {
-    fetchDepartements()
+    fetchRepos();
   }, []);
-
   return (
     <>
-      <div className="departments">
-        <div className="head">
-          <Title nomdepage="Dashboard" subname="Departements">
+      <div className="repos d-flex-4">
+        <div className="head d-head">
+          <Title nomdepage="Dashboard" subname="Férié">
             <button
               onClick={() => {
-                setDepid(0);
                 setIsModalOpened(true);
-                setType("AJOUTER_DEPARTEMENT");
+                setDepid(0);
+                setType("AJOUTER_REPOS");
               }}
             >
-              Ajouter un département
+              Ajouter un Férié
             </button>
           </Title>
           <table>
             <thead>
               <tr>
-                <th>#</th>
-                <th>Departements</th>
+                <th>Nom</th>
+                <th>Date</th>
                 <th>Actions</th>
               </tr>
             </thead>
-
             {!loading && (
               <tbody>
-                {departements.map((departement) => (
-                  <tr key={departement.id}>
-                    <td>{i++}</td>
-                    <td>{departement.Nom}</td>
+                {repos.map((repo) => (
+                  <tr key={repo.id}>
+                    <td>{repo.nom}</td>
+                    <td>
+                      {moment(repo.repos[0].startAt)
+                        .lang("fr")
+                        .format("MMM DD YY")}
+                    </td>
                     <td>
                       <div className="form-group-button">
                         <button
-                          className="info"
                           onClick={() => {
-                            setDepid(departement.id);
+                            setDepid(repo.id);
                             setIsModalOpened(true);
-                            setType("AJOUTER_DEPARTEMENT");
-                            setLaunch(true);
+                            setType("AJOUTER_REPOS");
                           }}
-                          id={departement.id}
+                          id={repo.id}
                         >
                           Modifier
                         </button>
                         <button
-                          className="danger"
                           onClick={() => {
+                            setDepid(repo.id);
                             setIsModalOpened(true);
-                            setDepid(departement.id);
-                            setType("SUPPRIMER_DEPARTEMENT");
+                            setType("SUPPRIMER_REPOS");
                           }}
-                          id={departement.id}
+                          id={repo.id}
                         >
                           Supprimer
                         </button>
@@ -97,16 +93,17 @@ const Departments = () => {
           {loading && <TableLoader />}
         </div>
       </div>
-      <Modal
+      <ModalFerie
         isOpened={isModalOpened}
         onClose={() => setIsModalOpened(false)}
         Type={type}
         id={depid}
-        tables={departements}
-        setTables={setDepartements}
+        tables={repos}
+        setTables={setRepos}
         setDepid={setDepid}
       />
     </>
   );
 };
-export default Departments;
+
+export default Repos;

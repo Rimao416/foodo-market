@@ -1,17 +1,17 @@
 import React from "react";
-import "./edit.css";
+
 import { FiEdit, FiTrash2 } from "react-icons/fi";
-export default function Edit() {
+export default function Edit({id,isOpened,onClose,onOpen,setId,type,setType}) {
   return (
     <>
-      <div className="operations_users">
-        <span className="operations">
+      <div className="operations_users" id={"user"+id}>
+        <span className="operations" onClick={()=>{onOpen();setId(id);setType("AJOUTER_EMPLOYE")}}>
           <span className="icons">
-            <FiEdit />
+            <FiEdit/>
           </span>
           <span className="text">Modifier</span>
         </span>
-        <span className="operations">
+        <span className="operations" onClick={()=>{onOpen();setId(id);setType("SUPPRIMER_EMPLOYE")}}>
           <span className="icons">
             <FiTrash2 />
           </span>

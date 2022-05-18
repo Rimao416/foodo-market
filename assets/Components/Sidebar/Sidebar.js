@@ -1,17 +1,16 @@
 import { Link } from "react-router-dom";
-import React,{useContext} from 'react'
+import React, { useContext } from "react";
 import authApi from "../../services/authApi";
 import "./Sidebar.css";
 import AuthContext from "../../contexts/AuthContext";
 
-
-export default function Sidebar({history}) { 
-  const {isAuthenticated, setIsAuthenticated}=useContext(AuthContext)
-  const handleLogout=()=>{
-    authApi.logout()
-    setIsAuthenticated(false)
-    history.push('/login')
-  }
+export default function Sidebar({ history }) {
+  const { isAuthenticated, setIsAuthenticated } = useContext(AuthContext);
+  const handleLogout = () => {
+    authApi.logout();
+    setIsAuthenticated(false);
+    history.push("/login");
+  };
   return (
     <div className="sidebar">
       <div className="sidebarWrapper">
@@ -19,62 +18,38 @@ export default function Sidebar({history}) {
           <h3 className="sidebarTitle">Dashboard</h3>
           <ul className="sidebarList">
             <Link to="/" className="link">
-            <li className="sidebarListItem active">
-              Home
-            </li>
+              <li className="sidebarListItem active">Tableau de bord</li>
             </Link>
-            <li className="sidebarListItem">
-              Analytics
-            </li>
-            <li className="sidebarListItem">
-              Sales
-            </li>
+            <Link to="/employee" className="link">
+              <li className="sidebarListItem">Gestion des employés</li>
+            </Link>
+            <Link>
+              <li className="sidebarListItem">Gestion de pointage</li>
+            </Link>
           </ul>
         </div>
         <div className="sidebarMenu">
-          <h3 className="sidebarTitle">Quick Menu</h3>
+          <h3 className="sidebarTitle">Paramètres</h3>
           <ul className="sidebarList">
-            <Link to="/users" className="link">
-              <li className="sidebarListItem">
-                Users
-              </li>
+            <Link to="/departments" className="link">
+              <li className="sidebarListItem">Départements</li>
             </Link>
-            <Link to="/products" className="link">
-              <li className="sidebarListItem">
-                Products
-              </li>
+            <Link to="/postes" className="link">
+              <li className="sidebarListItem">Postes</li>
             </Link>
-            <li className="sidebarListItem">
-              Transactions
-            </li>
-            <li className="sidebarListItem">
-              Reports
-            </li>
-          </ul>
-        </div>
-        <div className="sidebarMenu">
-          <h3 className="sidebarTitle">Notifications</h3>
-          <ul className="sidebarList">
-            <li className="sidebarListItem">
-              Mail
-            </li>
-            <li className="sidebarListItem">
-              Feedback
-            </li>
-            <li className="sidebarListItem">
-              Messages
-            </li>
+            <Link to="/" className="link">
+              <li className="sidebarListItem">Autres</li>
+            </Link>
+            <li className="sidebarListItem">Transactions</li>
+            <li className="sidebarListItem">Reports</li>
           </ul>
         </div>
         <div className="sidebarMenu">
           <h3 className="sidebarTitle">Staff</h3>
           <ul className="sidebarList">
-            <li className="sidebarListItem">
-              Manage
-            </li>
-            <li className="sidebarListItem">
-              Analytics
-            </li>
+            <li className="sidebarListItem">Manage</li>
+            <li className="sidebarListItem">Analytics</li>
+
             <li onClick={handleLogout} className="sidebarListItem">
               Logout
             </li>

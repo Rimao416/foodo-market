@@ -1,0 +1,6 @@
+.pointage{
+    flex: 4;
+}
+.pointage .head{
+    margin-left: 20px;
+}

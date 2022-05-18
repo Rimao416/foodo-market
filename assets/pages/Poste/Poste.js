@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from "react";
+import TableLoader from "../../Components/loaders/TableLoader";
 import postApi from "../../services/postApi";
 import { Link } from "react-router-dom";
 import Title from "../../Components/title/Title";
 import Postmodal from "../../Components/modal/Postmodal";
 import "./poste.css";
+
 const Poste = () => {
   var i = 1;
   const [depid, setDepid] = useState(0);
   const [type, setType] = useState("");
   const [postes, setPostes] = useState([]);
+  const [loading, setLoading] = useState(true);
   const fetchPostes = async () => {
     try {
       const data = await postApi.findAll();
       setPostes(data);
+      setLoading(false);
     } catch (error) {
       console.log(error.response);
     }
@@ -34,7 +38,7 @@ const Poste = () => {
                 setType("AJOUTER_POSTE");
               }}
             >
-              Ajouter un département
+              Ajouter un poste
             </button>
           </Title>
           <table>
@@ -46,6 +50,7 @@ const Poste = () => {
                 <th>Actions</th>
               </tr>
             </thead>
+            {!loading && (
             <tbody>
               {postes.map((poste) => (
                 <tr key={poste.id}>
@@ -82,7 +87,9 @@ const Poste = () => {
                 </tr>
               ))}
             </tbody>
+              )}
           </table>
+          {loading && <TableLoader />}
         </div>
       </div>
       <Postmodal
@@ -92,6 +99,7 @@ const Poste = () => {
         id={depid}
         tables={postes}
         setTables={setPostes}
+        setDepid={setDepid}
       />
     </>
   );

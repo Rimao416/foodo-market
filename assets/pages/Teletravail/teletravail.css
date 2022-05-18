@@ -1,0 +1,39 @@
+.Teletravail{
+    margin: 0;
+    padding: 0;
+}
+.Teletravail input {
+    padding: .375rem .75rem;
+    width: 100%;
+    font-size: 1rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border-radius: .25rem;
+}
+.Teletravail label{
+    font-family: Roboto;
+    font-weight: 500;
+}
+.Teletravail .form-grap{
+    display: flex;
+    justify-content: space-around;
+}
+.Teletravail .form-group{
+    margin-left: 5%;
+    width: 90%;
+}
+/*
+.Teletravail .form-group .addMore{
+    background-color: #0069d9;
+    color: white;
+    border-radius: 15px;
+    display: inline;
+    padding: 10px;
+}*/

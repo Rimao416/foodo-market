@@ -1,21 +1,60 @@
 import React, { useState, useEffect } from "react";
 import "./modal.css";
 import { createPortal } from "react-dom";
-import { createAvatar } from "@dicebear/avatars";
-import * as style from "@dicebear/avatars-initials-sprites";
-import axios from "axios";
+/*import { createAvatar } from "@dicebear/avatars";
+import * as style from "@dicebear/avatars-initials-sprites";*/
 import departementApi from "../../services/departementApi";
 import postApi from "../../services/postApi";
-import Select from "../forms/Select";
+import employeApi from "../../services/employeApi";
 import { BiX } from "react-icons/bi";
-export default function Modalemployee({ isOpened, onClose }) {
+import Ajouteremploye from "../forms/Ajouteremploye";
+import Supprimeremploye from "../forms/Supprimeremploye";
+import { toast } from "react-toastify";
+const Modalemployee = ({
+  isOpened,
+  onClose,
+  table,
+  setTable,
+  id,
+  type,
+  setType,
+}) => {
+  console.log(type);
+  const fetchUser = async (monid) => {
+    try {
+      const response = await employeApi.find(monid);
+      console.log(response);
+      const { id, adresse, comeAt, email, firstName, lastName } = response;
+      setUser({ id, adresse, comeAt, email, firstName, lastName });
+    } catch (error) {
+      console.log("Erreur");
+    }
+  };
+  const [user, setUser] = useState({
+    email: "",
+    password: "",
+    passwordConfirm: "",
+    firstName: "",
+    lastName: "",
+    photo: "",
+    adresse: "",
+    comeAt: "",
+    poste: "",
+    Departement:""
+  });
+
+  console.log(id);
   const [departements, setDepartements] = useState([]);
   const [postes, setPostes] = useState([]);
   const fetchDepartements = async () => {
     try {
       const data = await departementApi
         .findAll()
-        .then((data) => setDepartements(data));
+        setDepartements(data)
+        console.log(data);
+
+        if(!user.Departement)setUser({...user,Departement:data[0].id})
+        
     } catch (error) {
       console.log(error.response);
     }
@@ -23,14 +62,22 @@ export default function Modalemployee({ isOpened, onClose }) {
   useEffect(() => {
     fetchDepartements();
   }, []);
-  const [user, setUser] = useState({
+  useEffect(() => {
+    if (id != 0) {
+      fetchUser(id);
+    }
+  }, [id]);
+
+  
+  const [errors, setErrors] = useState({
     email: "",
     password: "",
+    passwordConfirm: "",
     firstName: "",
     lastName: "",
-    photo: "",
     adresse: "",
     comeAt: "",
+    Departement:""
   });
   const handleChange = (event) => {
     const value = event.currentTarget.value;
@@ -53,16 +100,157 @@ export default function Modalemployee({ isOpened, onClose }) {
     setPostes(response);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
+    /*    document.querySelector(".card_user").classList.remove("active");
+    document.querySelector(".operations_users").classList.remove("hide");*/
     event.preventDefault();
-    /*if((user.firstName.length > 0) && (user.lastName.length > 0)){
-        setUser({
-          photo:`https://avatars.dicebear.com/api/initials/${user.firstName+" "+user.lastName}.svg`
-        })
-      }*/
-
     console.log(user);
+    const apiError = {};
+    if (id == 0) {
+      if (user.password !== user.passwordConfirm) {
+        apiError.passwordConfirm =
+          "Votre confirmation de mot de passe n'est pas conforme avec le mot de passe original";
+        setErrors(apiError);
+        return;
+      } else {
+        apiError.passwordConfirm = "";
+      }
+      if(user.Departement =="null"){
+        apiError.Departement="Assignez un département"
+        setErrors(apiError)
+        return
+      }else{
+        apiError.Departement=""
+      }
+    }
+    if (user.comeAt.length == 0) {
+      apiError.comeAt = "Vous devez renseigner une date";
+      setErrors(apiError);
+      return;
+    } else {
+      apiError.comeAt = "";
+    }
+
+    try {
+       /*******************************************************************************************PARTIE AJOUT************************************************* */
+      if (id == 0) {
+        const response = await employeApi.create(
+          user.email,
+          user.password,
+          user.firstName,
+          user.lastName,
+          user.photo,
+          user.adresse,
+          user.comeAt,
+          user.poste
+        );
+        setErrors({
+          email: "",
+          password: "",
+          firstName: "",
+          lastName: "",
+          adresse: "",
+          comeAt: "",
+        });
+       
+        const {
+          id,
+          adresse,
+          comeAt,
+          email,
+          firstName,
+          lastName,
+          photo,
+          poste,
+        } = response.data;
+
+        console.log(response);
+        var Designation = poste.Designation;
+        table.push({
+          id,
+          adresse,
+          comeAt,
+          email,
+          firstName,
+          lastName,
+          photo,
+          poste: {
+            Designation,
+          },
+        });
+        setTable(table);
+        setUser({
+          adresse: "",
+          comeAt: "",
+          email: "",
+          firstName: "",
+          lastName: "",
+        });
+
+        if (response.status == 201) {
+          toast.success("Utilisateur ajouté avec Succès")
+          onClose();
+        }
+         /*******************************************************************************************PARTIE MODIFICATION************************************************* */
+      } else if (id != 0 && type == "AJOUTER_EMPLOYE") {
+        const response = await employeApi.update(id,user.email,user.firstName,user.lastName,user.photo,user.adresse,user.poste)
+        setUser({
+          adresse: "",
+          comeAt: "",
+          email: "",
+          firstName: "",
+          lastName: "",
+        });
+        table.map((t) => {
+          if (t.id == id) {
+            t.firstName = user.firstName;
+            t.lastName = user.lastName;
+            t.adresse = user.adresse;
+            t.poste.Designation = response.data.poste.Designation;
+            t.photo = user.photo;
+          }
+        });
+
+        if (response.status == 200) {
+          onClose();
+        }
+      }
+      //      onClose()
+    } catch (error) {
+      if(error.response.status==400){
+        apiError.Departement="Indiquer un département"
+        setErrors(apiError)
+        console.log("Salut")
+      }
+      //      console.log(error.response)
+      error.response.data.violations.forEach((violation) => {
+        apiError[violation.propertyPath] = violation.message;
+      });
+      setErrors(apiError);
+    }
+    if (Object.keys(apiError).length == 0) {
+      onClose();
+      setErrors({
+        email: "",
+        firstName: "",
+        lastName: "",
+        adresse: "",
+        photo: "",
+        comeAt: "",
+      });
+    }
   };
+  /***************************************************************************************PARTIE SUPPRESSION ***************************************************** */
+  const onRemove = async (event) => {
+    try {
+      const response = await employeApi.delete(id)
+      setTable(table.filter((t) => t.id != id));
+      onClose();
+    } catch (error) {
+      console.log("erreur");
+    }
+  };
+  /****************************************************************************************FIN SUPPRESSION DELETE**************************************************** */
   if (!isOpened) {
     return null;
   }
@@ -73,144 +261,47 @@ export default function Modalemployee({ isOpened, onClose }) {
           <BiX
             onClick={() => {
               onClose();
+              setUser({
+                id: "",
+                adresse: "",
+                firstName: "",
+                lastName: "",
+                comeAt: "",
+              });
             }}
           />
         </span>
 
         <div className="modal-header">
-          <h5 className="modal-title">Ajouter un Employee</h5>
+          <h5 className="modal-title">
+            {id > 0 ? "Modifier un Employé" : "Ajouter un employé"}
+          </h5>
         </div>
         <div className="modal-body">
-          <form className="formulaire" onSubmit={handleSubmit}>
-            <div className="form-grap">
-              <div className="form-group">
-                <label htmlFor="firstName" className="label-input">
-                  Nom de l'employé
-                </label>
-                <input
-                  type="text"
-                  placeholder="ex. Mariem"
-                  name="firstName"
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="lastName" className="label-input">
-                  Prénom de l'employé
-                </label>
-                <input
-                  type="text"
-                  placeholder="ex. Omari"
-                  name="lastName"
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-            <div className="form-grap">
-              <div className="form-group">
-                <label htmlFor="password" className="label-input">
-                  Mot de passe
-                </label>
-                <input
-                  type="password"
-                  placeholder="ex. **********************"
-                  name="password"
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="ConfirmPassword" className="label-input">
-                  Confirmez le mot de passe
-                </label>
-                <input
-                  type="password"
-                  placeholder="ex. *********************"
-                  name="ConfirmPassword"
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-            <div className="form-grap">
-              <div className="form-group">
-                <label htmlFor="email" className="label-input">
-                  Adresse Mail
-                </label>
-                <input
-                  type="email"
-                  placeholder="ex. johndoe@gmail.com"
-                  name="email"
-                  onChange={handleChange}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="adresse" className="label-input">
-                  Adresse d'habitation
-                </label>
-                <input
-                  type="text"
-                  placeholder="ex. Av. Hédi Nouira"
-                  name="adresse"
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-            <div className="form-grap">
-              <div className="form-group">
-                <Select
-                  name="Departement"
-                  label="Choisir un   département"
-                  onChange={handleChoose}
-                >
-                  <option value="">----------------------------</option>
-                  {departements.map((departement) => (
-                    <option key={departement.id} value={departement.id}>
-                      {departement.Nom}
-                    </option>
-                  ))}
-                </Select>
-              </div>
-              <div className="form-group">
-                {postes.length > 0 ? (
-                  <>
-                    {" "}
-                    <Select
-                      name="poste"
-                      label="Choisir un poste"
-                      onChange={handleChange}
-                    >
-                      {postes.map((poste) => (
-                        <option key={poste.id} value={poste.id}>
-                          {poste.Designation}
-                        </option>
-                      ))}
-                    </Select>
-                  </>
-                ) : <><p>Veuillez sélectionner un département ayant des postes</p></>}
-              </div>
-            </div>
-            <div className="form-grap">
-              <div className="form-group">
-                <label htmlFor="comeAt" className="label-input">
-                  Date de venue dans l'entreprise
-                </label>
-                <input
-                  type="date"
-                  placeholder="ex. Av. Hédi Nouira"
-                  name="comeAt"
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-
-            <div className="submit-section">
-              <button className="form-first " type="submit">
-                Ajouter un Employé
-              </button>
-            </div>
-          </form>
+          {type == "AJOUTER_EMPLOYE" ? (
+            <Ajouteremploye
+              handleSubmit={handleSubmit}
+              errors={errors}
+              user={user}
+              handleChange={handleChange}
+              id={id}
+              departements={departements}
+              handleChoose={handleChoose}
+              postes={postes}
+            />
+          ) : (
+            <>
+              <Supprimeremploye
+                onClose={onClose}
+                setUser={setUser}
+                onRemove={onRemove}
+              />
+            </>
+          )}
         </div>
       </div>
     </div>,
     document.getElementById("modal")
   );
-}
+};
+export default Modalemployee;

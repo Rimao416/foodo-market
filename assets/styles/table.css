@@ -2,7 +2,7 @@ table{
     /*  display: grid;*/
   /*    height: 100vh;*/
       margin-top: 3%;
-      width: 95%;
+      width: 100%;
       border-collapse: collapse;
       box-shadow: 0 5px 10px #e1e5ee;
       background-color: white;
@@ -22,8 +22,13 @@ table{
       
   }
   tbody td{
-      padding: 1rem 2rem;
+      text-align: center;
+      padding: 1rem 1rem;
       color: #212529;
+      font-size: 14px;
+  }
+  tbody button{
+      text-align: center;
   }
   tbody tr:nth-child(even){
       background-color: rgb(233,233,233);

@@ -56,8 +56,9 @@ body {
     color:red;
   }
 div.form-group-button{
-  display: inline;
+  display: flex;
   margin-left: 2%;
+
 }
 div.form-group-button button{
   border: none;
@@ -88,4 +89,10 @@ div.form-flex-button{
   display: flex;
   justify-content: space-between;
 }
+.d-flex-4{
+  flex: 4;
+}
 
+.d-head{
+  margin-left: 20px;;
+}

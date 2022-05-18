@@ -2,6 +2,7 @@ import React, { useState,useContext } from "react";
 import "./Login.css";
 import authApi from "../../services/authApi";
 import AuthContext from "../../contexts/AuthContext";
+import { toast } from "react-toastify";
 export default function Login({history}) {
   const {setIsAuthenticated}=useContext(AuthContext)
   const [credentials, setCredentails] = useState({
@@ -24,21 +25,22 @@ export default function Login({history}) {
 
     }catch(error){
       console.log(error.response)
-      setError("Aucun compte ne possède ces coordonnées")
+      toast.error("Adresse Mail ou Mot de passe Invalide")
     }
   }
   return (
     <>
+    
       <div className="limiter">
         <div className="container-login100">
           <div className="wrap-login100">
             <div className="login100-form-title">
-              <span className="login100-form-title-1">Sign In</span>
+              <span className="login100-form-title-1">Connexion</span>
             </div>
             {error && <div className="error"><p>{error}</p></div>}
             <form className="login100-form validate-form" onSubmit={handleSubmit}>
               <div className="wrap-input100 validate-input m-b-26">
-                <span className="label-input100">Username</span>
+                <span className="label-input100">Mail</span>
                 <input
                   defaultValue={credentials.username}
                   onChange={handleChange}
@@ -53,7 +55,7 @@ export default function Login({history}) {
               </div>
 
               <div className="wrap-input100 validate-input m-b-18">
-                <span className="label-input100">Password</span>
+                <span className="label-input100">Mot de passe</span>
                 <input
                   defaultValue={credentials.password}
                   onChange={handleChange}
