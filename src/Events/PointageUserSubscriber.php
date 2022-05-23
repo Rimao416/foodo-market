@@ -25,7 +25,7 @@ use Symfony\Component\Security\Core\Security;
             $method=$event->getRequest()->getMethod();
             if($poitange instanceof Pointage && $method == 'POST'){
                 $user=$this->security->getUser();
-                $poitange->setUser($user);
+                $poitange->setAuteur($user);
             }
 
         }

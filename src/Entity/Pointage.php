@@ -39,6 +39,16 @@ class Pointage
      */
     private $pointeAt;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="pointes")
+     */
+    private $auteur;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $status;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -88,6 +98,30 @@ class Pointage
     public function setPointeAt(\DateTimeInterface $pointeAt): self
     {
         $this->pointeAt = $pointeAt;
+
+        return $this;
+    }
+
+    public function getAuteur(): ?User
+    {
+        return $this->auteur;
+    }
+
+    public function setAuteur(?User $auteur): self
+    {
+        $this->auteur = $auteur;
+
+        return $this;
+    }
+
+    public function getStatus(): ?string
+    {
+        return $this->status;
+    }
+
+    public function setStatus(string $status): self
+    {
+        $this->status = $status;
 
         return $this;
     }

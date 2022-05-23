@@ -25,7 +25,6 @@ const Employee = () => {
         .then((response) => response.data["hydra:member"]);
       setEmploye(data);
       setLoading(false)
-      console.log(data);
     } catch (error) {
       console.log(error.response);
     }

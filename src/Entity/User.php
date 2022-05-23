@@ -13,11 +13,15 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ApiResource(
+ * itemOperations={
+ * "GET","PUT","DELETE","increment"={"method"="get","path"="/nombre/{matricule}/matricules","controller"="App\Controller\GetIdController"}
+ * },
  * normalizationContext={
  * "groups"={"users_read"}
  * },
- * denormalizationContext={"disable_type_enforcement"=true}
- * )
+ * denormalizationContext={"disable_type_enforcement"=true},
+ * ),
+ * 
  * @ORM\Entity(repositoryClass=UserRepository::class)
  */
 class User implements UserInterface
@@ -99,9 +103,23 @@ class User implements UserInterface
      */
     private $pointages;
 
+
+
+    
+    /**
+     * @ORM\Column(type="integer",nullable=true)
+     */
+    private $matricule;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Pointage::class, mappedBy="auteur")
+     */
+    private $pointes;
+
     public function __construct()
     {
         $this->pointages = new ArrayCollection();
+        $this->pointes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -281,6 +299,48 @@ class User implements UserInterface
             // set the owning side to null (unless already changed)
             if ($pointage->getUser() === $this) {
                 $pointage->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getMatricule(): ?int
+    {
+        return $this->matricule;
+    }
+
+    public function setMatricule(?int $matricule): self
+    {
+        $this->matricule = $matricule;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Pointage>
+     */
+    public function getPointes(): Collection
+    {
+        return $this->pointes;
+    }
+
+    public function addPointe(Pointage $pointe): self
+    {
+        if (!$this->pointes->contains($pointe)) {
+            $this->pointes[] = $pointe;
+            $pointe->setAuteur($this);
+        }
+
+        return $this;
+    }
+
+    public function removePointe(Pointage $pointe): self
+    {
+        if ($this->pointes->removeElement($pointe)) {
+            // set the owning side to null (unless already changed)
+            if ($pointe->getAuteur() === $this) {
+                $pointe->setAuteur(null);
             }
         }
 

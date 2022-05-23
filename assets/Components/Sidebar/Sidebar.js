@@ -23,7 +23,7 @@ export default function Sidebar({ history }) {
             <Link to="/employee" className="link">
               <li className="sidebarListItem">Gestion des employés</li>
             </Link>
-            <Link>
+            <Link to="/pointage" className="link">
               <li className="sidebarListItem">Gestion de pointage</li>
             </Link>
           </ul>
