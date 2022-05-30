@@ -5,6 +5,7 @@ import Usertable from "../../Components/Table/Usertable";
 import "./employee.css";
 import "../../styles/input.css";
 import Title from "../../Components/title/Title";
+import "../../styles/button.css"
 import Modalemployee from "../../Components/modal/Modalemployee";
 import TableLoader from "../../Components/loaders/TableLoader";
 import axios from "axios";
@@ -54,9 +55,7 @@ const Employee = () => {
           </Title>
         </div>
         <div className="search_control">
-          <input type="text" placeholder="Employé Id" />
-          <input type="text" placeholder="Employé Name" />
-          <input type="text" placeholder="Departement" />
+          <input type="text" placeholder="ex. Omari, Departement" />
           <button type="submit" className="form-green">
             Rechercher
           </button>
@@ -83,7 +82,7 @@ const Employee = () => {
           </>
         ) : (
           <>
-            <table>
+             <table>
               <thead>
                 <tr>
                   <th>Nom</th>
@@ -125,7 +124,7 @@ const Employee = () => {
                 ))}
               </tbody>
                   )}
-            </table>
+            </table> 
             {loading && <TableLoader />}
           </>
         )}

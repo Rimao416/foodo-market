@@ -58,12 +58,13 @@ body {
 div.form-group-button{
   display: flex;
   margin-left: 2%;
-
+  justify-content: center;
 }
 div.form-group-button button{
   border: none;
   margin-left: 2%;
   padding: 10px;
+
   font-size: 14px;
   border-radius: 25px;
   font-weight: 500;
@@ -96,3 +97,14 @@ div.form-flex-button{
 .d-head{
   margin-left: 20px;;
 }
+ @media screen and (max-width: 992px) {
+
+  div.form-group-button{
+    display: block;
+  }
+ div.form-group-button button{
+   padding: 2px;
+   font-size: 10px;
+ }
+
+} 

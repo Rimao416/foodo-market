@@ -3,10 +3,9 @@ import React, { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
 import moment from "moment";
 import { BiX } from "react-icons/bi";
-import axios from "axios";
 import AjouterFerie from "../forms/AjouterFerie";
 import SupprimerRepos from "../forms/SupprimerRepos";
-
+import ferieApi from "../../services/ferieApi";
 const ModalFerie = ({
   isOpened,
   onClose,
@@ -30,14 +29,12 @@ const ModalFerie = ({
       console.log(id);
       fetchRepos(id);
     } else if (Type == "SUPPRIMER_REPOS" && id != 0) {
-      setTitle("Supprimer lrepose");
+      setTitle("Supprimer le ferié");
     }
   }, [id]);
   const fetchRepos = async (id) => {
     try {
-      const data = await axios
-        .get(`http://localhost:8000/api/repos/` + id)
-        .then((response) => response.data);
+      const data = await ferieApi.find(id);
       console.log(data);
       setConge({
         nom: data.nom,
@@ -57,13 +54,9 @@ const ModalFerie = ({
     try {
       /*****************************************MODIFICATION REPOS*************************** */
       if (id != 0) {
-        let data = await axios
-          .put(`http://localhost:8000/api/repos/${id}`, conge)
-          .then((response) => response.data);
+        let data = await ferieApi.update(id, conge);
         try {
-          await axios
-            .delete(`http://localhost:8000/api/repos/${id}/delete`)
-            .then((response) => response.data);
+          await ferieApi.deleteFerie(id);
         } catch (error) {
           console.log(error.response);
         }
@@ -72,10 +65,7 @@ const ModalFerie = ({
         var day = moment(startAt).format("YYYY-MM-DD");
         for (var i = 1; i <= jour; i++) {
           try {
-            await axios.post("http://localhost:8000/api/jours", {
-              startAt: day,
-              repos: `api/repos/${data.id}`,
-            });
+            await ferieApi.createJour(day, data.id);
             day = moment(day).add(1, "day").format("YYYY-MM-DD");
             toast.success("Modification effectuée avec succèss");
           } catch (error) {
@@ -90,9 +80,7 @@ const ModalFerie = ({
         });
         /*****************************************AJOUT REPOS*************************** */
       } else if (id == 0) {
-        let data = await axios
-          .post("http://localhost:8000/api/repos", conge)
-          .then((response) => response.data);
+        let data = await ferieApi.createRepos(conge);
         const { id, nom } = data;
         const { startAt, jour } = conge;
         console.log(id);
@@ -111,10 +99,7 @@ const ModalFerie = ({
         setTables(tables);
         for (var i = 1; i <= jour; i++) {
           try {
-            await axios.post("http://localhost:8000/api/jours", {
-              startAt: day,
-              repos: `api/repos/${id}`,
-            });
+            await ferieApi.createJour(day, id);
             day = moment(day).add(1, "day").format("YYYY-MM-DD");
             toast.success("Jour ajouté avec Succès");
           } catch (error) {
@@ -136,9 +121,7 @@ const ModalFerie = ({
   /*************************************************************SUPPRESSION REPOS************************ */
   const onRemove = async (event) => {
     try {
-      const response = await axios.delete(
-        `http://localhost:8000/api/repos/${id}`
-      );
+      const response = await ferieApi.deleteRepos(id);
       setTables(tables.filter((table) => table.id != id));
       onClose();
       setDepid(0);

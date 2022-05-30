@@ -4,8 +4,8 @@ import TableLoader from "../../Components/loaders/TableLoader";
 import Title from "../../Components/title/Title";
 import moment from "moment";
 import "./repos.css";
-import axios from "axios";
 import { toast } from "react-toastify";
+import ferieApi from "../../services/ferieApi";
 const Repos = () => {
   const [depid, setDepid] = useState(0);
   const [isModalOpened, setIsModalOpened] = useState(false);
@@ -14,9 +14,7 @@ const Repos = () => {
   const [type, setType] = useState("");
   const fetchRepos = async () => {
     try {
-      const response = await axios
-        .get("http://localhost:8000/api/repos")
-        .then((response) => response.data["hydra:member"]);
+      const response = await ferieApi.findAll();
       setRepos(response);
       console.log(response);
       setLoading(false);

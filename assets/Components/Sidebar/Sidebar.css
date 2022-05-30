@@ -51,4 +51,9 @@
       margin-right: 5px;
       font-size: 20px !important;
   }
-  
+  @media screen and (max-width: 992px) {
+    
+    .sidebar {
+      display: none;
+    }
+  }

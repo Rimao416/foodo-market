@@ -1,22 +1,23 @@
 import axios from "axios";
+import { DEPARTEMENTS_API } from "../config";
 function findAll() {
   return axios
-    .get("http://localhost:8000/api/departements")
+    .get(DEPARTEMENTS_API)
     .then((response) => response.data["hydra:member"]);
 }
 function deleteDepartement(id) {
-  return axios.delete("http://localhost:8000/api/departements/" + id);
+  return axios.delete(DEPARTEMENTS_API + "/" + id);
 }
 function find(id) {
   return axios
-    .get(`http://localhost:8000/api/departements/` + id)
+    .get(DEPARTEMENTS_API + "/" + id)
     .then((response) => response.data);
 }
 function update(id, departement) {
-  return axios.put("http://localhost:8000/api/departements/" + id, departement);
+  return axios.put(DEPARTEMENTS_API + "/" + id, departement);
 }
 function create(departement) {
-  return axios.post("http://localhost:8000/api/departements", departement);
+  return axios.post(DEPARTEMENTS_API, departement);
 }
 
 export default {

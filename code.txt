@@ -1,0 +1,32 @@
+          if (remplacer.length > 0) {
+            console.log(pointageApi.getMomentDate(remplacer, 0));
+            if (remplacer.length == 2) {
+              axios.post("http://localhost:8000/api/pointages", {
+                startAt: remplacer[0]["Date/Temps"].split(" ")[1],
+                endAt: remplacer[1]["Date/Temps"].split(" ")[1],
+                user: "api/users/129",
+                pointeAt: pointageApi.getMomentDate(remplacer, 0),
+                status: "PRESENTIEL",
+              });
+              /*setItems({
+                ...items,
+                pointeAt: pointageApi.getMomentDate(remplacer, 0),
+                startAt: remplacer[0]["Date/Temps"].split(" ")[1],
+                endAt: remplacer[1]["Date/Temps"].split(" ")[1],
+              });*/
+            } else if (remplacer.length == 1) {
+              axios.post("http://localhost:8000/api/pointages", {
+                startAt: remplacer[0]["Date/Temps"].split(" ")[1],
+                endAt: "----",
+                user: "api/users/129",
+                pointeAt: pointageApi.getMomentDate(remplacer, 0),
+                status: "PRESENTIEL",
+              });
+              setItems({
+                ...items,
+                pointeAt: "salut",
+                startAt: "pourquoi",
+                endAt: "dfdsfs",
+              });
+            }
+          }

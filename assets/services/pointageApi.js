@@ -1,5 +1,7 @@
+import axios from "axios";
 import moment from "moment";
-
+import React, { useState } from "react";
+import { JOUR_API,POINTAGE_API } from "../config";
 const uniqueData = (table, unique) => {
   table.forEach((c) => {
     if (!unique.includes(c["Matricule"])) {
@@ -33,12 +35,62 @@ const getMomentDate = (table, index) => {
     "YYYY-MM-DD"
   );
 };
+const momentjs = (value) => {
+  return "-" + value;
+};
+const isHoliday = (month, year, nombre_des_jours) => {
+  var i = 1;
+  var jour_ferie = 0;
+  var jour = 0;
+  while (i <= nombre_des_jours) {
+    jour = moment(year + momentjs(month) + momentjs(transform(i)));
+    if (jour.day() == 0 || jour.day() == 6) {
+      jour_ferie++;
+    }
+
+    i++;
+  }
+  //  return jour_ferie
+  return jour_ferie;
+};
+var getDataHolidays = async function () {
+  try {
+    return await axios
+      .get(JOUR_API)
+      .then((response) => response.data["hydra:member"]);
+  } catch (error) {}
+}; /*
+
+const ferie = async () => {
+  console.log(await getDataHolidays());
+};*/
+function convertTime(num) {
+  var hours = Math.floor(num / 3600);
+
+  var minutes = Math.floor((num % 3600) / 60);
+  var secondes = Math.floor((num % 3600) % 60);
+  return hours + ":" + minutes + ":" + secondes;
+}
+function create(Matricule, Travail, Absence, Supp, Retard) {
+  return axios.post(POINTAGE_API, {
+    matricule: parseInt(Matricule),
+    jourTravail: parseInt(Travail),
+    jourAbsence: parseInt(Absence),
+    heureSupp: parseInt(Supp),
+    heureRetard: parseInt(Retard),
+  });
+}
 
 export default {
   uniqueData,
   getMonth,
   load_data,
   transform,
+  momentjs,
   getDateData,
   getMomentDate,
+  isHoliday,
+  getDataHolidays,
+  convertTime,
+  create,
 };

@@ -2,11 +2,7 @@
     display: flex;
     justify-content: space-between;
 }
- .head .body_header .right_part{
-    position: relative;
-    margin-right: 5%;
 
-}
 /*    */
 
  .head .body_header .right_part .icons{

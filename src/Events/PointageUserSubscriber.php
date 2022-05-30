@@ -7,12 +7,15 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpKernel\Event\GetResponseForControllerResultEvent;
 use Symfony\Component\HttpKernel\KernelEvents;
 use Symfony\Component\Security\Core\Security;
+use Doctrine\ORM\EntityManagerInterface;
 
     class PointageUserSubscriber implements EventSubscriberInterface{
         private $security;
-        public function __construct(Security $security)
+        private $manager;
+        public function __construct(Security $security,EntityManagerInterface $manager)
         {   
             $this->security=$security;
+            $this->manager=$manager;
         }
         public static function getSubscribedEvents()
         {
@@ -24,9 +27,15 @@ use Symfony\Component\Security\Core\Security;
             $poitange=$event->getControllerResult();
             $method=$event->getRequest()->getMethod();
             if($poitange instanceof Pointage && $method == 'POST'){
-                $user=$this->security->getUser();
-                $poitange->setAuteur($user);
+                $user_id=$poitange->getUser()->getId();
+                 $user=$this->security->getUser();
+               $user_id=$poitange->getUser()->getId();
+               $matricule=$this->manager->createQuery('SELECT u.matricule FROM App\Entity\User u WHERE u.id= :matricule')
+               ->setParameter('matricule',$user_id)
+               ->getResult();
+                 $poitange->setMatricule(10);
+               $poitange->setMatricule($matricule[0]["matricule"]);
+                 $poitange->setAuteur($user);
             }
-
         }
     }

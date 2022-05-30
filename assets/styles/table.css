@@ -33,3 +33,29 @@ table{
   tbody tr:nth-child(even){
       background-color: rgb(233,233,233);
   }
+  @media screen and (max-width: 992px) {
+    table {
+       margin-top: 3%;
+       font-family: Roboto;
+       font-weight: 400;
+    padding-left: 2%;
+    padding-right: 2%;
+
+    }
+    
+    tbody td{
+        padding-bottom: 6rem;
+        padding: 0;
+        padding-top: 4%;
+    }
+    thead th{
+        font-size: 12px;
+        padding-bottom: 6rem;
+        padding: 0;
+        padding-top: 4%;
+    }
+    tbody td{
+        font-size: 12px;
+        padding-top: 4%;
+    }
+  }

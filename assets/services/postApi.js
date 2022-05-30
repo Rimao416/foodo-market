@@ -1,30 +1,31 @@
 import axios from "axios";
+import { POSTES_API,DEPARTEMENTS_API } from "../config";
 function findAll() {
   return axios
-    .get("http://localhost:8000/api/postes")
+    .get(POSTES_API)
     .then((response) => response.data["hydra:member"]);
 }
 function deletePoste(id) {
-  return axios.delete("http://localhost:8000/api/postes/" + id);
+  return axios.delete(POSTES_API+"/"+ id);
 }
 function findOneById(id){
-  return axios.get(`http://localhost:8000/api/departements/${id}/postes`)
+  return axios.get(DEPARTEMENTS_API+"/"+id+"/postes")
   .then((response)=>response.data["hydra:member"])
 }
 
 function find(id) {
   return axios
-    .get("http://localhost:8000/api/postes/" + id)
+    .get(POSTES_API+"/"+ id)
     .then((response) => response.data);
 }
 function update(id, designation, departement) {
-  return axios.put("http://localhost:8000/api/postes/" + id, {
+  return axios.put(POSTES_API+"/"+ id, {
     Designation: designation,
     departement: `/api/departements/${departement}`,
   });
 }
 function create(designation, departement) {
-  return axios.post("http://localhost:8000/api/postes", {
+  return axios.post(POSTES_API, {
     Designation: designation,
     departement: `/api/departements/${departement}`,
   });

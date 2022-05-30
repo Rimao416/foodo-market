@@ -45,5 +45,4 @@ security:
          - { path: ^/api/departements, roles: IS_AUTHENTICATED_FULLY }
          - { path: ^/api/employee, roles: IS_AUTHENTICATED_FULLY }
          - { path: ^/api/postes, roles: IS_AUTHENTICATED_FULLY }
-         - { path: ^/api/pointages, roles: IS_AUTHENTICATED_FULLY }
          - { path: ^/api/users, roles: IS_AUTHENTICATED_ANONYMOUSLY }

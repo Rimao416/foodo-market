@@ -1,8 +1,19 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Title from "../../Components/title/Title";
+import employeApi from "../../services/employeApi";
+import Select from "../../Components/forms/Select";
 import "./teletravail.css";
+import { toast } from "react-toastify";
 export default function Teletravail() {
+  const [users, setUsers] = useState([]);
+  const fetchUsers = async () => {
+    const data = await employeApi.getUsers();
+    setUsers(data);
+  };
+  useEffect(() => {
+    fetchUsers();
+  }, []);
   const [id, setId] = useState(0);
   const [pointage, setPointage] = useState([
     {
@@ -12,11 +23,24 @@ export default function Teletravail() {
       endAt: "",
     },
   ]);
+  const [user, setUser] = useState([]);
+  function addZero(value) {
+    return value + ":00";
+  }
   const handleinputchange = (e, index) => {
     const { name, value } = e.target;
     const list = [...pointage];
     list[index][name] = value;
     setPointage(list);
+  };
+  const handleChange = (event) => {
+    const value = event.currentTarget.value;
+    const name = event.currentTarget.name;
+    //    setUser({ ...user, [name]: value });
+    setUser({
+      ...user,
+      [name]: value,
+    });
   };
   const handleaddclick = () => {
     setPointage([
@@ -25,13 +49,38 @@ export default function Teletravail() {
     ]);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log(pointage);
+    // const chaine="Moi"
+    // console.log(chaine);
+    var user_id = parseInt(
+      JSON.stringify(user)
+        .split(":")[1]
+        .replaceAll('"', "")
+        .replace("}", "")
+        .trim()
+    );
+    // console.log(pointage);
     for (let i = 0; i < pointage.length; i++) {
-      const data = axios.post(
-        "http://localhost:8000/api/pointages",
-        pointage[i]
-      );
+      try {
+        const data =await axios.
+        post("http://localhost:8000/api/pointages", {
+          startAt: addZero(pointage[i].startAt),
+          endAt: addZero(pointage[i].endAt),
+          user: `api/users/${user_id}`,
+          pointeAt: pointage[i].pointeAt,
+          status: "DISTANCIEL",
+        });
+        // const data = await TeletravailApi.create(
+        //   addZero(pointage[i].startAt),
+        //   addZero(pointage[i].endAt),
+        //   user_id,
+        //   pointage[i].pointeAt,
+        // );
+      } catch (error) {
+        toast.info("Erreur lors de l'ajout");
+      }
     }
   };
   const handleremove = (index) => {
@@ -53,6 +102,19 @@ export default function Teletravail() {
           </Title>
           <pre></pre>
           <form className="formulaire" onSubmit={handleSubmit}>
+            <Select
+              name="user"
+              label="Choisissez l'utilisateur"
+              // value={poste.departement}
+              onChange={handleChange}
+            >
+              <option value="">--------------------------------</option>
+              {users.map((user) => (
+                <option key={user.id} value={user.id}>
+                  {user.firstName}
+                </option>
+              ))}
+            </Select>
             {pointage.map((p, index) => (
               <div key={index}>
                 <div className="form-grap">

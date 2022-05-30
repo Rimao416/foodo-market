@@ -8,6 +8,7 @@ use ApiPlatform\Core\Annotation\ApiResource;
 
 /**
  * @ApiResource()
+ * @ORM\Table(name="Teletravail")
  * @ORM\Entity(repositoryClass=PointageRepository::class)
  */
 class Pointage
@@ -48,6 +49,11 @@ class Pointage
      * @ORM\Column(type="string", length=255)
      */
     private $status;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $matricule;
 
     public function getId(): ?int
     {
@@ -122,6 +128,18 @@ class Pointage
     public function setStatus(string $status): self
     {
         $this->status = $status;
+
+        return $this;
+    }
+
+    public function getMatricule(): ?int
+    {
+        return $this->matricule;
+    }
+
+    public function setMatricule(int $matricule): self
+    {
+        $this->matricule = $matricule;
 
         return $this;
     }

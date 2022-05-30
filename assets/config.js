@@ -1,0 +1,9 @@
+export const API_URL=process.env.API_URL
+export const DEPARTEMENTS_API=API_URL+'departements'
+export const EMPLOYES_API=API_URL+'users'
+export const TELETRAVAIL_API=API_URL+'pointages'
+export const POINTAGE_API=API_URL+'enregistrements'
+export const POSTES_API=API_URL+'postes'
+export const LOGIN_API=API_URL+'login_check'
+export const REPOS_API=API_URL+'repos'
+export const JOUR_API=API_URL+'jours'

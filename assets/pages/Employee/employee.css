@@ -27,17 +27,17 @@
     display: block;
 }
 .search_control{
-    margin-bottom: 15px;
+    margin-top: 3%;
+    display: flex;
+    justify-content: space-between;
 }
  .search_control input,  .search_control button{
     margin-left: 20px;
-    width: 20%;
-    display: inline;
+    box-sizing: border-box;
     padding: .375rem .75rem;
     font-size: 1rem;
     font-weight: 400;
     color: #212529;
-    background-color: #fff;
     background-clip: padding-box;
     border: 1px solid #ced4da;
     border-radius: .25rem;
@@ -46,9 +46,14 @@
     height: 39px;
 }
 .search_control input{
-    height: 30px;
+    height: auto;
+
 }
 .search_control input:focus{
     width: 20%;
     display: inline;
 }
+@media screen and (max-width: 992px) {
+
+    
+  }

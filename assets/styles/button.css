@@ -45,3 +45,12 @@ button.btn-danger {
 button.btn-info {
   background-color: #483D8B;
 }
+
+/* @media screen and (max-width: 992px) {
+
+  button.btn-danger,
+  button.btn-info {
+    padding: 5px;
+    background-color: green;
+  }
+} */
