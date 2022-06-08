@@ -13,6 +13,7 @@
     border-radius: .3rem;
     outline: 0;
     display: block;
+    overflow-y: scroll;
 }
 .modal #cross{
     position: relative;
@@ -75,4 +76,11 @@
     width: 100%;
     margin-right: 3%;
     margin-bottom: 2%;
+}
+.modal textarea, .modal textarea:focus, .modal textarea:checked{
+    width: 100%;
+    font-family: Roboto;
+    font-size: 15px;
+    font-style: italic;
+    border: 1px solid gray;
 }

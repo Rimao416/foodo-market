@@ -46,3 +46,4 @@ security:
          - { path: ^/api/employee, roles: IS_AUTHENTICATED_FULLY }
          - { path: ^/api/postes, roles: IS_AUTHENTICATED_FULLY }
          - { path: ^/api/users, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+         - { path: ^/api/conges, roles: IS_AUTHENTICATED_ANONYMOUSLY }

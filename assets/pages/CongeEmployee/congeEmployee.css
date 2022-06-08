@@ -1,0 +1,12 @@
+
+div.conge-choix .form-group{
+    display: flex;
+    font-size: 15px;
+    justify-content: space-between;
+}
+input[type="radio"]{
+    width: 10%;
+}
+input[type="radio"]:checked{
+    width: 10%;
+}

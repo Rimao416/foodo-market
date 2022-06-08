@@ -51,14 +51,16 @@ const App = () => {
             <div className="container">
               <SideBardWithRouter />
 
-              <PrivateRoute path="/postes"  component={Poste} />
-              <PrivateRoute path="/employee"  component={Employee} />
-              <PrivateRoute path="/pointage"  component={Pointage} />
+              <PrivateRoute path="/postes" component={Poste} />
+              <PrivateRoute path="/employee" component={Employee} />
+              <PrivateRoute path="/pointage" component={Pointage} />
               <PrivateRoute
                 path="/pointage/teletravail"
                 component={Teletravail}
               />
               <PrivateRoute path="/departments" component={Departments} />
+              <PrivateRoute path="/conge" component={Conge} />
+              <PrivateRoute path="/congeuser" component={CongeEmployee} />
               <PrivateRoute path="/repos" component={Repos} />
               <PrivateRoute path="/" component={Home} />
             </div>
@@ -72,4 +74,6 @@ const App = () => {
 import "./styles/app.css";
 import Teletravail from "./pages/Teletravail/Teletravail";
 import Repos from "./pages/Repos/Repos";
+import Conge from "./pages/Conge/Conge";
+import CongeEmployee from "./pages/CongeEmployee/CongeEmployee";
 ReactDom.render(<App />, document.getElementById("root"));

@@ -1,18 +1,24 @@
 /*Configuration des buttons*/
 
-button.form-first {
-  background-color: #ff9b44;
+button.form-first, button.form-cancel {
+  
   color: #fff;
   font-family: 13px Poppins;
   font-weight: 500;
   padding: 6px 12px;
   border-radius: 50px;
 }
+button.form-first{
+  background-color: #ff9b44;
+}
 
 button.form-first:hover {
   background-color: #ff851a;
   border: 1px solid #ff851a;
   color: #fff;
+}
+button.form-cancel{
+  background-color:#B22222;
 }
 
 button.form-green {

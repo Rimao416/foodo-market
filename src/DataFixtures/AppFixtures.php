@@ -40,7 +40,7 @@ class AppFixtures extends Fixture
             $depart->setNom($listes_des_departements[$j]);
             $manager->persist($depart);
         }
-
+        
         $manager->flush();
     }
 }

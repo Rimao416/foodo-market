@@ -26,6 +26,12 @@ export default function Sidebar({ history }) {
             <Link to="/pointage" className="link">
               <li className="sidebarListItem">Gestion de pointage</li>
             </Link>
+            <Link to="/conge" className="link">
+              <li className="sidebarListItem">Gestion de congé</li>
+            </Link>
+            <Link to="/congeuser" className="link">
+              <li className="sidebarListItem">Gestion de congé (Employee)</li>
+            </Link>
           </ul>
         </div>
         <div className="sidebarMenu">
@@ -40,7 +46,9 @@ export default function Sidebar({ history }) {
             <Link to="/" className="link">
               <li className="sidebarListItem">Autres</li>
             </Link>
-            <li className="sidebarListItem">Transactions</li>
+            <Link to="/repos" className="link">
+              <li className="sidebarListItem">Ferié</li>
+            </Link>
             <li className="sidebarListItem">Reports</li>
           </ul>
         </div>
