@@ -1,7 +1,7 @@
 import axios from "axios";
 import moment from "moment";
 import React, { useState } from "react";
-import { JOUR_API,POINTAGE_API } from "../config";
+import { JOUR_API, POINTAGE_API } from "../config";
 const uniqueData = (table, unique) => {
   table.forEach((c) => {
     if (!unique.includes(c["Matricule"])) {
@@ -80,6 +80,12 @@ function create(Matricule, Travail, Absence, Supp, Retard) {
     heureRetard: parseInt(Retard),
   });
 }
+function returnId(matricule, tables) {
+  let data;
+  data = tables.filter((f) => f.matricule == matricule);
+
+  return data.length > 0 ? data[0].id: 0;
+}
 
 export default {
   uniqueData,
@@ -93,4 +99,5 @@ export default {
   getDataHolidays,
   convertTime,
   create,
+  returnId,
 };

@@ -12,8 +12,11 @@ import { toast } from "react-toastify";
 import ferieApi from "../../services/ferieApi";
 import TeletravailApi from "../../services/TeletravailApi";
 const Pointage = () => {
+  const [isDocumentLoaded, setIsDocumentLoaded] = useState(false);
   const [output, setOutput] = useState([]);
+  const [employes, setEmploye] = useState([]);
   const [isModalOpened, setIsModalOpened] = useState(false);
+  const [pointages, setPointages] = useState([]);
   var moi = {};
   const [items, setItems] = useState({
     pointeAt: "",
@@ -23,6 +26,18 @@ const Pointage = () => {
   });
   let repos = "";
   let teletravail = [];
+
+  const fetchEmployes = async () => {
+    try {
+      const data = await axios
+        .get("http://localhost:8000/api/users")
+        .then((response) => response.data);
+      setEmploye(data);
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
+
   const fetchRepos = async () => {
     try {
       const data = await ferieApi.findAllDay();
@@ -50,10 +65,30 @@ const Pointage = () => {
   };
 
   useEffect(() => {
-    fetchRepos();
-  }, []);
+    if (isDocumentLoaded == true) {
+      fetchRepos();
+    }
+    //
+  }, [isDocumentLoaded]);
   useEffect(() => {
-    fetchTeletravail();
+    if (isDocumentLoaded == true) {
+      fetchTeletravail();
+    }
+  }, [isDocumentLoaded]);
+  useEffect(() => {
+    if (isDocumentLoaded == true) {
+      fetchEmployes();
+    }
+  }, [isDocumentLoaded]);
+  const fetchData = async () => {
+    const data = await axios
+      .get("http://localhost:8000/api/enregistrements")
+      .then((response) => response.data);
+    console.log(data);
+    setPointages(data);
+  };
+  useEffect(() => {
+    fetchData();
   }, []);
 
   var remplacer = [];
@@ -79,6 +114,7 @@ const Pointage = () => {
       const wsname = wb.SheetNames[0];
       const ws = wb.Sheets[wsname];
       var data = XLSX.utils.sheet_to_json(ws);
+      setIsDocumentLoaded(true);
       console.log(data);
       for (let j = 0; j < teletravail.length; j++) {
         data.push({
@@ -156,7 +192,7 @@ const Pointage = () => {
         const TRAVAIL = Math.round(RESULTAT_TRAVAIL / 8);
         const TRAVAILENTREPRISE = (jourmois - jourFerie) * 8;
         output.push({
-          matricule: uniqueChars[user],
+          id: uniqueChars[user],
           travail: TRAVAIL,
           notification: non_pointage,
           absence: jourmois - TRAVAIL - jourFerie,
@@ -176,15 +212,33 @@ const Pointage = () => {
       }
       setOutput(output);
       console.log(output);
-      for (let k = 0; k <= output.length; k++) {
-        pointageApi.create(
-          output[k].matricule,
-          output[k].travail,
-          output[k].absence,
-          output[k].heure_supp,
-          output[k].heure_retard
-        );
+      console.log(pointageApi.returnId(18, employes));
+      for (let k = 0; k < output.length; k++) {
+        try {
+          axios.post("http://localhost:8000/api/enregistrements", {
+            jourAbsence: output[k].absence,
+            jourTravail: output[k].travail,
+            heureSupp: output[k].heure_supp,
+            heureRetard: output[k].heure_retard,
+            matricule: `/api/users/${pointageApi.returnId(
+              output[k].id,
+              employes
+            )}`,
+          });
+          toast.success("Ajout Reussie");
+        } catch (error) {
+          toast.error("ERREUR LORS DE L'AJOUT");
+        }
       }
+      // for (let k = 0; k <= output.length; k++) {
+      //   pointageApi.create(
+      //     output[k].id,
+      //     output[k].travail,
+      //     output[k].absence,
+      //     output[k].heure_supp,
+      //     output[k].heure_retard
+      //   );
+      // }
       toast.success(
         "Le données sont dans la base de donnée et sont prêtes à être exportées"
       );
@@ -192,25 +246,6 @@ const Pointage = () => {
   };
   return (
     <>
-      <h1>{repos.length > 0 && repos.length}</h1>
-      {teletravail.length > 0 && (
-        <table>
-          <thead>
-            <tr>
-              <th>Left 1</th>
-              <th>Left 2</th>
-            </tr>
-          </thead>
-          <tbody>
-            {teletravail.map((i, index) => (
-              <tr key={index}>
-                <td>i</td>
-                <td>2</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
       <div className="pointage">
         <div className="head">
           <Title nomdepage="Dashboard" subname="Pointage">
@@ -225,6 +260,45 @@ const Pointage = () => {
               <Link to="/pointage/teletravail/">Télétravail</Link>{" "}
             </button>
           </Title>
+          <pre></pre>
+          <div className="header-input">
+            <input type="text" placeholder="Entrez le nom de l'employé" />
+            <input type="text" />
+            <input type="text" />
+          </div>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Employée</th>
+                <th>Poste</th>
+                <th>Jour de travail</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {pointages.map((p) => (
+                <tr key={p.id}>
+                  <td>
+                    {p.matricule.firstName} | {p.matricule.lastName}
+                  </td>
+                  <td>{p.matricule.poste.Designation}</td>
+                  <td>{p.jourTravail} Jours</td>
+                  <td>
+                    <div className="form-group-button">
+                      <button>
+                        {" "}
+                        <Link to={`/pointage/${p.matricule.id}`}>
+                          Voir Plus
+                        </Link>{" "}
+                      </button>
+                    </div>
+                    <span></span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         </div>
       </div>
       <AlertPointageModal

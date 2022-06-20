@@ -21,7 +21,8 @@ const Departments = () => {
     try {
       const data = await departementApi
         .findAll()
-        .then((data) => setDepartements(data));
+        setDepartements(data)
+        console.log(data)
       setLoading(false);
     } catch (error) {
       toast.error("Erreur lors du chargement des données")

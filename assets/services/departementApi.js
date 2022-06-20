@@ -3,7 +3,7 @@ import { DEPARTEMENTS_API } from "../config";
 function findAll() {
   return axios
     .get(DEPARTEMENTS_API)
-    .then((response) => response.data["hydra:member"]);
+    .then((response) => response.data);
 }
 function deleteDepartement(id) {
   return axios.delete(DEPARTEMENTS_API + "/" + id);

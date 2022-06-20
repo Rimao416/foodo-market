@@ -3,19 +3,63 @@ import { BiX } from "react-icons/bi";
 import Select from "../forms/Select";
 import { createPortal } from "react-dom";
 import axios from "axios";
-const CongeModalEmployee = ({ isOpened, onClose }) => {
-  if (!isOpened) {
-    return null;
-  }
-
+import { toast } from "react-toastify";
+import moment from "moment";
+import AjouterDemande from "../forms/AjouterDemande";
+import SupprimerDemande from "../forms/SupprimerDemande";
+const CongeModalEmployee = ({
+  isOpened,
+  onClose,
+  Type,
+  id,
+  tables,
+  setTables,
+  setDepid,
+}) => {
   const [typeConge, setTypeConge] = useState("");
+  const [conges, setConges] = useState([]);
   const [image, setName] = useState("");
   const [conge, setConge] = useState({
     DateDebut: "",
     DateFin: "",
     motif: "",
     file: "",
+    explication: "",
+    status: "EN ATTENTE",
   });
+  const fetchModal = async (id) => {
+    try {
+      const data = await axios
+        .get("http://localhost:8000/api/conges/" + id)
+        .then((response) => response.data);
+      setConge({
+        DateDebut: moment(data.DateDebut).format("YYYY-MM-DD"),
+        DateFin: moment(data.DateFin).format("YYYY-MM-DD"),
+        motif: data.motif,
+        explication: data.explication,
+      });
+
+      // console.log(DateDebut)
+      // const { DateDebut, DateFin, motif, explication } = await axios
+      //   .get("http://localhost:8000/api/conges/" + id)
+      //   .then((response) => response.data);
+      //   console.log(DateDebut)
+      // setConge({ DateDebut, DateFin, motif, explication });
+      console.log(data);
+    } catch (error) {
+      console.log(error.response);
+      toast.error("Erreur lors du chargement, veuillez recommencer");
+    }
+  };
+  useEffect(() => {
+    if (id != 0) {
+      fetchModal(id);
+    }
+  }, [id]);
+
+  if (!isOpened) {
+    return null;
+  }
   const handleChoose = (event) => {
     const value = event.currentTarget.value;
     const name = event.currentTarget.name;
@@ -34,13 +78,91 @@ const CongeModalEmployee = ({ isOpened, onClose }) => {
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
-    axios
-      .post("http://localhost:8000/api/conges", conge)
-      .then((response) => console.log(response.data));
+    // let file = new FormData();
+    // file.append("file", conge.file);
+    // // console.log(file.get("file"));
+    // try {
+    //   await axios
+    //     .post("http://localhost:8000/api/media_objects", file=conge.file, {
+    //     })
+    //     .then((response) => console.log(response.data));
+    // } catch (error) {
+    //   console.log(error.response);
+    // }
+    try {
+      if (id != 0) {
+        const response = await axios.put(
+          "http://localhost:8000/api/conges/" + id,
+          conge
+        );
+          setConge({
+            DateDebut: "",
+            DateFin: "",
+            motif: "",
+            explication: "",
+          });
+          tables.map((t) => {
+            if (t.id == id) {
+              t.DateDebut = response.data.DateDebut;
+              t.DateFin = response.data.DateFin;
+              t.motif = response.data.motif;
+              t.explication = response.data.explication;
+            }
+          });
+          // console.log(tables);
+          // console.log(response.data.DateDebut);
 
-    console.log(conge);
+          setDepid(0);
+          onClose();
+          toast.info("Modification effectuée avec Succès");
+      } else {
+        const data = await axios
+          .post("http://localhost:8000/api/conges", conge)
+          .then((response) => response.data);
+        tables.push({
+          DateDebut:conge.DateDebut,
+          DateFin: conge.DateFin,
+          motif: data.motif,
+          explication: data.explication,
+          status: "EN ATTENTE",
+        });
+        setConge({
+          DateDebut: "",
+          DateFin: "",
+          motif: "",
+          explication: "",
+        });
+        setDepid(0);
+        toast.success(
+          "Demande de congé en attente, vous recevrez une réponse d'ici peu"
+        );
+        onClose();
+      }
+    } catch (error) {
+      // toast.error("Erreur lors de la demande de congé");
+      console.log(error.response);
+    }
   };
-
+  const onRemove = async (event) => {
+    try {
+      const response = await axios.delete(
+        "http://localhost:8000/api/conges/" + id
+      );
+      setTables(tables.filter((table) => table.id != id));
+      setConge({
+        DateDebut: "",
+        DateFin: "",
+        motif: "",
+        explication: "",
+      });
+      // setPoste({ designation: "" });
+      setDepid(0);
+      onClose();
+      toast.success("Suppression avec Succès");
+    } catch (error) {
+      console.log("erreur");
+    }
+  };
   function dependantDropdown(value) {
     console.log("toto");
     if (value == "texte") {
@@ -48,10 +170,11 @@ const CongeModalEmployee = ({ isOpened, onClose }) => {
         <>
           <textarea
             maxLength="255"
-            name="file"
+            name="explication"
             cols="30"
             rows="10"
             onChange={handleChange}
+            defaultValue={conge.explication}
           ></textarea>
         </>
       );
@@ -63,6 +186,9 @@ const CongeModalEmployee = ({ isOpened, onClose }) => {
       );
     }
   }
+  // useEffect(() => {
+
+  // },[]);
   return createPortal(
     <div className="overlay">
       <div className="modal">
@@ -70,86 +196,34 @@ const CongeModalEmployee = ({ isOpened, onClose }) => {
           <BiX
             onClick={() => {
               onClose();
+              setConge({
+                DateDebut: "",
+                DateFin: "",
+                motif: "",
+                explication: "",
+              });
             }}
           />
         </span>
         <div className="modal-header">
-          <h5 className="modal-title">Demande de congé</h5>
+          <h5 className="modal-title">
+            Demande de congé {id != 0 && "(Modification)"} 
+          </h5>
         </div>
         <div className="modal-body">
-          <form className="form" onSubmit={handleSubmit}>
-            <label htmlFor="departement" className="label-input">
-              Date de début
-            </label>
-            <input
-              type="date"
-              defaultValue="22/05/2022"
-              name="DateDebut"
-              onChange={handleChange}
+          {Type == "AJOUTER_DEMANDE" ? (
+            <AjouterDemande
+              handleSubmit={handleSubmit}
+              conge={conge}
+              handleChange={handleChange}
+              handleChoose={handleChoose}
+              dependantDropdown={dependantDropdown(typeConge)}
+              typeConge={typeConge}
+              id={id}
             />
-            <label htmlFor="departement" className="label-input">
-              Date de Fin
-            </label>
-            <input
-              type="date"
-              defaultValue="22/05/2022"
-              name="DateFin"
-              onChange={handleChange}
-            />
-            <label htmlFor="departement" className="label-input">
-              Motif
-            </label>
-            <Select name="motif" value="conge" onChange={handleChange}>
-              <option value="">--------------------------------</option>
-              <option value="Congé maladie">Congé maladie</option>
-              <option value="Congé annuel">Congé annuel</option>
-              <option value="Congé sans solde">Congé sans solde</option>
-              <option value="Congé de maternité">Congé de maternité</option>
-              <option value="Congé payé">Congé payé</option>
-              <option value="Décès">Décès</option>
-              <option value="Autre">Autre</option>
-            </Select>
-            <pre></pre>
-            <div>
-              <div className="conge-choix">
-                <div className="form-group">
-                  <input
-                    type="radio"
-                    value="texte"
-                    name="file"
-                    id=""
-                    onChange={handleChoose}
-                  />
-                  <span>Joindre un text</span>
-                </div>
-                <div className="form-group">
-                  <input
-                    value="fichier"
-                    type="radio"
-                    name="file"
-                    id=""
-                    onChange={handleChoose}
-                  />
-                  <span>Joindre un Fichier</span>
-                </div>
-              </div>
-            </div>
-            {dependantDropdown(typeConge)}
-
-            <div className="submit-section">
-              <button className="form-first " type="submit">
-                Ajouter
-              </button>
-              <button
-                className="form-cancel"
-                onClick={() => {
-                  onClose();
-                }}
-              >
-                Annuler
-              </button>
-            </div>
-          </form>
+          ) : (
+            <SupprimerDemande onClose={onClose} onRemove={onRemove} />
+          )}
         </div>
       </div>
     </div>,

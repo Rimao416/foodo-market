@@ -30,7 +30,7 @@ class User implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"users_read","postes_read"})
+     * @Groups({"users_read","postes_read","conges_read","pointage_read"})
      */
     private $id;
 
@@ -38,13 +38,13 @@ class User implements UserInterface
      * 
      * @Assert\Email(message="Le mail est incorrecte")
      * @Assert\NotBlank(message="Le champ mail doit être remplie")
-     * @Groups({"users_read","postes_read"})
+     * @Groups({"users_read","postes_read","conges_read","pointage_read"})
      * @ORM\Column(type="string", length=180, unique=true)
      */
     private $email;
 
     /**
-     * @Groups({"users_read","postes_read"})
+     * @Groups({"users_read","postes_read","conges_read"})
      * @ORM\Column(type="json")
      */
     private $roles = [];
@@ -58,27 +58,27 @@ class User implements UserInterface
 
     /**
      * @Assert\NotBlank(message="Le nom ne doit pas être vide")
-     * @Groups({"users_read","postes_read"})
+     * @Groups({"users_read","postes_read","conges_read","pointage_read"})
      * @ORM\Column(type="string", length=255)
      */
     private $firstName;
 
     /**
      * @Assert\NotBlank(message="Le prenom ne doit pas être vide")
-     * @Groups({"users_read","postes_read"})
+     * @Groups({"users_read","postes_read","conges_read","pointage_read"})
      * @ORM\Column(type="string", length=255)
      */
     private $lastName;
 
     /**
-     * @Groups({"users_read","postes_read"})
+     * @Groups({"users_read","postes_read","conges_read","pointage_read"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $photo;
 
     /**
      * @Assert\NotBlank(message="L'adresse ne doit pas être vide")
-     * @Groups({"users_read","postes_read"})
+     * @Groups({"users_read","postes_read","conges_read"})
      * @ORM\Column(type="string", length=255)
      */
     private $adresse;
@@ -92,7 +92,7 @@ class User implements UserInterface
     private $comeAt;
 
     /**
-     * @Groups({"users_read","postes_read"})
+     * @Groups({"users_read","postes_read","conges_read","pointage_read"})
      * @ORM\ManyToOne(targetEntity=Poste::class, inversedBy="users")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -107,7 +107,8 @@ class User implements UserInterface
 
     
     /**
-     * @ORM\Column(type="integer",nullable=true)
+     * @ORM\Column(type="integer",nullable=true,unique=true)
+     * @Groups({"users_read","postes_read"})
      */
     private $matricule;
 
@@ -116,10 +117,33 @@ class User implements UserInterface
      */
     private $pointes;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Conge::class, mappedBy="user")
+     */
+    private $conges;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Notification::class, mappedBy="user")
+     */
+    private $notifications;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Enregistrement::class, mappedBy="matricule")
+     */
+    private $enregistrements;
+
+
+
+
     public function __construct()
     {
         $this->pointages = new ArrayCollection();
         $this->pointes = new ArrayCollection();
+        $this->conges = new ArrayCollection();
+        $this->notifications = new ArrayCollection();
+        $this->enregistrements = new ArrayCollection();
+       
+     
     }
 
     public function getId(): ?int
@@ -346,4 +370,98 @@ class User implements UserInterface
 
         return $this;
     }
+
+    /**
+     * @return Collection<int, Conge>
+     */
+    public function getConges(): Collection
+    {
+        return $this->conges;
+    }
+
+    public function addConge(Conge $conge): self
+    {
+        if (!$this->conges->contains($conge)) {
+            $this->conges[] = $conge;
+            $conge->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConge(Conge $conge): self
+    {
+        if ($this->conges->removeElement($conge)) {
+            // set the owning side to null (unless already changed)
+            if ($conge->getUser() === $this) {
+                $conge->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Notification>
+     */
+    public function getNotifications(): Collection
+    {
+        return $this->notifications;
+    }
+
+    public function addNotification(Notification $notification): self
+    {
+        if (!$this->notifications->contains($notification)) {
+            $this->notifications[] = $notification;
+            $notification->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeNotification(Notification $notification): self
+    {
+        if ($this->notifications->removeElement($notification)) {
+            // set the owning side to null (unless already changed)
+            if ($notification->getUser() === $this) {
+                $notification->setUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Enregistrement>
+     */
+    public function getEnregistrements(): Collection
+    {
+        return $this->enregistrements;
+    }
+
+    public function addEnregistrement(Enregistrement $enregistrement): self
+    {
+        if (!$this->enregistrements->contains($enregistrement)) {
+            $this->enregistrements[] = $enregistrement;
+            $enregistrement->setMatricule($this);
+        }
+
+        return $this;
+    }
+
+    public function removeEnregistrement(Enregistrement $enregistrement): self
+    {
+        if ($this->enregistrements->removeElement($enregistrement)) {
+            // set the owning side to null (unless already changed)
+            if ($enregistrement->getMatricule() === $this) {
+                $enregistrement->setMatricule(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+
+
 }

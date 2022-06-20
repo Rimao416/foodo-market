@@ -51,6 +51,12 @@
 .modal .form {
     width: 400px;
 }
+.modal .header img{
+    border-radius: 150px;
+}
+.modal .header h5{
+    font-weight: 500;
+}
 
 
 /*PARTIE AFFICHAGE*/

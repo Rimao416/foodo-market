@@ -42,8 +42,9 @@ security:
     # Note: Only the *first* access control that matches will be used
     access_control:
          - { path: ^/api/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
-         - { path: ^/api/departements, roles: IS_AUTHENTICATED_FULLY }
+         - { path: ^/api/departements, roles: IS_AUTHENTICATED_ANONYMOUSLY }
          - { path: ^/api/employee, roles: IS_AUTHENTICATED_FULLY }
          - { path: ^/api/postes, roles: IS_AUTHENTICATED_FULLY }
          - { path: ^/api/users, roles: IS_AUTHENTICATED_ANONYMOUSLY }
          - { path: ^/api/conges, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+         - { path: ^/api/media_objects, roles: IS_AUTHENTICATED_ANONYMOUSLY }

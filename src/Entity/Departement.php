@@ -25,19 +25,19 @@ class Departement
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"departements_read","postes_read"})
+     * @Groups({"departements_read","postes_read","users_read"})
      */
     private $id;
 
     /**
-     * @Groups({"departements_read","postes_read"})
+     * @Groups({"departements_read","postes_read","users_read","conges_read"})
      * @Assert\NotBlank(message="Le nom du Département est obligatoire")
      * @ORM\Column(type="string", length=255)
      */
     private $Nom;
 
     /**
-     * @Groups({"departtements_read"})
+     * 
      * @ApiSubresource
      * @ORM\OneToMany(targetEntity=Poste::class, mappedBy="departement")
      */

@@ -22,20 +22,20 @@ class Poste
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-     * @Groups({"postes_read","departements_read","users_read"})
+     * @Groups({"postes_read","departements_read","users_read","conges_read","pointage_read"})
      */
     private $id;
 
     /**
      * @Assert\NotBlank(message="Le nom du Poste est obligatoire")
-     * @Groups({"postes_read","departements_read","users_read"})
+     * @Groups({"postes_read","departements_read","users_read","conges_read","pointage_read"})
      * @ORM\Column(type="string", length=255)
      */
     private $Designation;
 
     /**
      *
-     * @Groups({"postes_read","departements_read","users_read"})
+     * @Groups({"postes_read","departements_read","users_read","conges_read"})
      * @ORM\ManyToOne(targetEntity=Departement::class, inversedBy="postes")
      */
     private $departement;

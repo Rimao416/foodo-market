@@ -8,7 +8,8 @@ function find(id) {
 function findAll() {
   return axios
     .get(REPOS_API)
-    .then((response) => response.data["hydra:member"]);
+    .then((response) => response.data);
+    // .then((response) => response.data["hydra:member"]);
 }
 function findAllDay(){
   return axios

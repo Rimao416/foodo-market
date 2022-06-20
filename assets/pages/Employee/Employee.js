@@ -23,7 +23,7 @@ const Employee = () => {
     try {
       const data = await axios
         .get("http://localhost:8000/api/users")
-        .then((response) => response.data["hydra:member"]);
+        .then((response) => response.data);
       setEmploye(data);
       setLoading(false)
     } catch (error) {

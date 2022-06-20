@@ -1,4 +1,5 @@
 export const API_URL=process.env.API_URL
+// const API_URL='http://localhost:8000/api/'
 export const DEPARTEMENTS_API=API_URL+'departements'
 export const EMPLOYES_API=API_URL+'users'
 export const TELETRAVAIL_API=API_URL+'pointages'

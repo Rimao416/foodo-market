@@ -5,10 +5,14 @@ namespace App\Entity;
 use App\Repository\EnregistrementRepository;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
- * @ApiResource()
- * @ORM\Table(name="Pointage")
+ * @ApiResource(
+ * normalizationContext={
+ * "groups"={"pointage_read"}
+ * }
+ * )
  * @ORM\Entity(repositoryClass=EnregistrementRepository::class)
  */
 class Enregistrement
@@ -16,48 +20,54 @@ class Enregistrement
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
+     * @Groups({"pointage_read","users_read"})
      * @ORM\Column(type="integer")
      */
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
-     */
-    private $matricule;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $jourTravail;
-
-    /**
+     * @Groups({"pointage_read","users_read"})
      * @ORM\Column(type="integer")
      */
     private $jourAbsence;
 
     /**
+     * @Groups({"pointage_read","users_read"})
+     * @ORM\Column(type="integer")
+     */
+    private $jourTravail;
+
+    /**
+     * @Groups({"pointage_read","users_read"})
      * @ORM\Column(type="integer")
      */
     private $heureSupp;
 
     /**
+     * @Groups({"pointage_read","users_read"})
      * @ORM\Column(type="integer")
      */
     private $heureRetard;
+
+    /**
+     * @Groups({"pointage_read","users_read"})
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="enregistrements")
+     */
+    private $matricule;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getMatricule(): ?int
+    public function getJourAbsence(): ?int
     {
-        return $this->matricule;
+        return $this->jourAbsence;
     }
 
-    public function setMatricule(int $matricule): self
+    public function setJourAbsence(int $jourAbsence): self
     {
-        $this->matricule = $matricule;
+        $this->jourAbsence = $jourAbsence;
 
         return $this;
     }
@@ -70,18 +80,6 @@ class Enregistrement
     public function setJourTravail(int $jourTravail): self
     {
         $this->jourTravail = $jourTravail;
-
-        return $this;
-    }
-
-    public function getJourAbsence(): ?int
-    {
-        return $this->jourAbsence;
-    }
-
-    public function setJourAbsence(int $jourAbsence): self
-    {
-        $this->jourAbsence = $jourAbsence;
 
         return $this;
     }
@@ -106,6 +104,18 @@ class Enregistrement
     public function setHeureRetard(int $heureRetard): self
     {
         $this->heureRetard = $heureRetard;
+
+        return $this;
+    }
+
+    public function getMatricule(): ?User
+    {
+        return $this->matricule;
+    }
+
+    public function setMatricule(?User $matricule): self
+    {
+        $this->matricule = $matricule;
 
         return $this;
     }

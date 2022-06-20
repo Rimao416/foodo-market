@@ -3,7 +3,7 @@ import { POSTES_API,DEPARTEMENTS_API } from "../config";
 function findAll() {
   return axios
     .get(POSTES_API)
-    .then((response) => response.data["hydra:member"]);
+    .then((response) => response.data);
 }
 function deletePoste(id) {
   return axios.delete(POSTES_API+"/"+ id);

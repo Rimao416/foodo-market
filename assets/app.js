@@ -54,6 +54,7 @@ const App = () => {
               <PrivateRoute path="/postes" component={Poste} />
               <PrivateRoute path="/employee" component={Employee} />
               <PrivateRoute path="/pointage" component={Pointage} />
+              <PrivateRoute path="/pointage/:id" component={PointageUser} />
               <PrivateRoute
                 path="/pointage/teletravail"
                 component={Teletravail}
@@ -76,4 +77,5 @@ import Teletravail from "./pages/Teletravail/Teletravail";
 import Repos from "./pages/Repos/Repos";
 import Conge from "./pages/Conge/Conge";
 import CongeEmployee from "./pages/CongeEmployee/CongeEmployee";
+import PointageUser from "./pages/PointageUser/PointageUser"
 ReactDom.render(<App />, document.getElementById("root"));

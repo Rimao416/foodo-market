@@ -3,7 +3,8 @@ import { EMPLOYES_API } from "../config";
 function getUsers() {
   return axios
     .get(EMPLOYES_API)
-    .then((response) => response.data["hydra:member"]);
+    .then((response) => response.data);
+    // .then((response) => response.data["hydra:member"]);
 }
 
 function find(id) {

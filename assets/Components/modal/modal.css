@@ -84,3 +84,26 @@
     font-style: italic;
     border: 1px solid gray;
 }
+/* NE CONCERNE QUE LA PARTIE DEMANDE DE TRAVAIL */
+.modal .header{
+    text-align: center;
+}
+.modal .body .flex-dialog{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2%;
+    padding: 2px 2px;
+}
+.modal .body .flex-dialog h6{
+    font-weight: 500;
+}
+.modal .header img{
+    border-radius: 150px;
+}
+.modal .header h5{
+    font-weight: 500;
+}
+.modal .button-control{
+    display: flex;
+    justify-content: space-around;
+}
