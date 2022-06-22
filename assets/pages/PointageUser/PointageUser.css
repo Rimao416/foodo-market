@@ -1,0 +1,42 @@
+.flexAbsence {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+
+}
+
+.flex_fiche_absence {
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0, 0, 0, .125);
+    border-radius: .25rem;
+    flex-basis: 30.33%;
+    height: 400px;
+    max-height: 400px;
+    margin-top: 2%;
+}
+
+.flex_fiche_absence .container-box {
+    padding: 4%;
+}
+
+.flex_fiche_absence h4 {
+    font-weight: 600;
+}
+
+.flex_fiche_absence p {
+    display: flex;
+    justify-content: space-between;
+}
+
+.flexAbsence .stats-info {
+    padding: 2%;
+    background-clip: border-box;
+    border: 1px solid rgba(0, 0, 0, .125);
+    border-radius: .25rem;
+    margin-top: 2%;
+}
+.flex_fiche_absence:nth-child(4){
+    flex-basis: 60%;
+    margin-left: 0;
+}

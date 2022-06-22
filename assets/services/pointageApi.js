@@ -81,11 +81,10 @@ function create(Matricule, Travail, Absence, Supp, Retard) {
   });
 }
 function returnId(matricule, tables) {
-  let data;
-  data = tables.filter((f) => f.matricule == matricule);
-
+  let data = tables.filter((f) => f.matricule == matricule);
   return data.length > 0 ? data[0].id: 0;
 }
+  // return 
 
 export default {
   uniqueData,

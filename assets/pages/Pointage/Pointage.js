@@ -26,6 +26,29 @@ const Pointage = () => {
   });
   let repos = "";
   let teletravail = [];
+  const ajoutPointage = async () => {
+    for (let k = 0; k < output.length; k++) {
+      try {
+        await axios.post("http://localhost:8000/api/enregistrements", {
+          matricule: `/api/users/${pointageApi.returnId(
+            output[k].id,
+            employes
+          )}`,
+          jourTravail: output[k].travail,
+          jourAbsence: output[k].absence,
+          heureSupp: output[k].heure_supp,
+          heureRetard: output[k].heure_retard,
+          // matricule: `/api/users/${pointageApi.returnId(
+          //   output[k].id,
+          //   employes
+          // )}`,
+          sentAt: "04-2022",
+        });
+      } catch (error) {
+        toast.error("ERREUR LORS DE L'AJOUT");
+      }
+    }
+  };
 
   const fetchEmployes = async () => {
     try {
@@ -90,7 +113,11 @@ const Pointage = () => {
   useEffect(() => {
     fetchData();
   }, []);
-
+  useEffect(() => {
+    if (employes.length > 0) {
+      ajoutPointage();
+    }
+  }, [employes]);
   var remplacer = [];
   const [status, setStatus] = useState(false);
   const [message, setMessage] = useState("");
@@ -212,24 +239,10 @@ const Pointage = () => {
       }
       setOutput(output);
       console.log(output);
-      console.log(pointageApi.returnId(18, employes));
-      for (let k = 0; k < output.length; k++) {
-        try {
-          axios.post("http://localhost:8000/api/enregistrements", {
-            jourAbsence: output[k].absence,
-            jourTravail: output[k].travail,
-            heureSupp: output[k].heure_supp,
-            heureRetard: output[k].heure_retard,
-            matricule: `/api/users/${pointageApi.returnId(
-              output[k].id,
-              employes
-            )}`,
-          });
-          toast.success("Ajout Reussie");
-        } catch (error) {
-          toast.error("ERREUR LORS DE L'AJOUT");
-        }
-      }
+      console.log(pointageApi.returnId(12, employes));
+      console.log("le mois est" + mois);
+      // ajoutPointage();
+
       // for (let k = 0; k <= output.length; k++) {
       //   pointageApi.create(
       //     output[k].id,
@@ -277,7 +290,8 @@ const Pointage = () => {
               </tr>
             </thead>
             <tbody>
-              {pointages.map((p) => (
+                             
+              {pointages.length > 0 && pointages.map((p) => (
                 <tr key={p.id}>
                   <td>
                     {p.matricule.firstName} | {p.matricule.lastName}
@@ -296,7 +310,7 @@ const Pointage = () => {
                     <span></span>
                   </td>
                 </tr>
-              ))}
+              ))} 
             </tbody>
           </table>
         </div>

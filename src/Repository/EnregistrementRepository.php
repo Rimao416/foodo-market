@@ -20,6 +20,7 @@ class EnregistrementRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Enregistrement::class);
     }
+   
 
     /**
      * @throws ORMException
@@ -73,4 +74,14 @@ class EnregistrementRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function findByMatricule($value,$year){
+        
+        return $this->createQueryBuilder('e')
+            ->andWhere('e.matricule = :val')
+            ->andWhere('e.sentAt like :sent')
+            ->setParameter('val', $value)
+            ->setParameter('sent', '%'.$year)
+            ->getQuery()
+            ->getResult();
+    }
 }

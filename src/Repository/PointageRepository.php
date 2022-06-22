@@ -20,6 +20,7 @@ class PointageRepository extends ServiceEntityRepository
     {
         parent::__construct($registry, Pointage::class);
     }
+    
 
     /**
      * @throws ORMException

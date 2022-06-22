@@ -6,12 +6,17 @@ use App\Repository\EnregistrementRepository;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
+use App\Controller\PointageDetailUser;
 
 /**
  * @ApiResource(
  * normalizationContext={
  * "groups"={"pointage_read"}
- * }
+ * },collectionOperations={"PATCH","DELETE","GET","PUT","getDetail"={
+ * "method"="get",
+ * "path"="/enregistrements/details/{matricule}/{annee}",
+ * "controller"="App\Controller\PointageDetailUser"
+ * }}
  * )
  * @ORM\Entity(repositoryClass=EnregistrementRepository::class)
  */
@@ -54,6 +59,13 @@ class Enregistrement
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="enregistrements")
      */
     private $matricule;
+
+    /**
+     * @Groups({"pointage_read","users_read"})
+     * @ORM\Column(type="string",length=255)
+     */
+    private $sentAt;
+
 
     public function getId(): ?int
     {
@@ -116,6 +128,18 @@ class Enregistrement
     public function setMatricule(?User $matricule): self
     {
         $this->matricule = $matricule;
+
+        return $this;
+    }
+
+    public function getSentAt(): ?string
+    {
+        return $this->sentAt;
+    }
+
+    public function setSentAt(string $sentAt): self
+    {
+        $this->sentAt = $sentAt;
 
         return $this;
     }
