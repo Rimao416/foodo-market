@@ -6,6 +6,7 @@ import * as style from "@dicebear/avatars-initials-sprites";*/
 import departementApi from "../../services/departementApi";
 import postApi from "../../services/postApi";
 import employeApi from "../../services/employeApi";
+import moment from "moment";
 import { BiX } from "react-icons/bi";
 import Ajouteremploye from "../forms/Ajouteremploye";
 import Supprimeremploye from "../forms/Supprimeremploye";
@@ -18,6 +19,7 @@ const Modalemployee = ({
   id,
   type,
   setType,
+  setId
 }) => {
   console.log(type);
   const fetchUser = async (monid) => {
@@ -25,7 +27,14 @@ const Modalemployee = ({
       const response = await employeApi.find(monid);
       console.log(response);
       const { id, adresse, comeAt, email, firstName, lastName } = response;
-      setUser({ id, adresse, comeAt, email, firstName, lastName });
+      setUser({
+        id,
+        adresse,
+        comeAt: moment(comeAt).format("YYYY-MM-DD"),
+        email,
+        firstName,
+        lastName,
+      });
     } catch (error) {
       console.log("Erreur");
     }
@@ -40,21 +49,19 @@ const Modalemployee = ({
     adresse: "",
     comeAt: "",
     poste: "",
-    Departement:""
+    Departement: "",
   });
 
-  console.log(id);
+  console.log("L'id est"+ id);
   const [departements, setDepartements] = useState([]);
   const [postes, setPostes] = useState([]);
   const fetchDepartements = async () => {
     try {
-      const data = await departementApi
-        .findAll()
-        setDepartements(data)
-        console.log(data);
+      const data = await departementApi.findAll();
+      setDepartements(data);
+      console.log(data);
 
-        if(!user.Departement)setUser({...user,Departement:data[0].id})
-        
+      // if(!user.Departement)setUser({...user,Departement:data[0].id})
     } catch (error) {
       console.log(error.response);
     }
@@ -68,7 +75,6 @@ const Modalemployee = ({
     }
   }, [id]);
 
-  
   const [errors, setErrors] = useState({
     email: "",
     password: "",
@@ -77,7 +83,7 @@ const Modalemployee = ({
     lastName: "",
     adresse: "",
     comeAt: "",
-    Departement:""
+    Departement: "",
   });
   const handleChange = (event) => {
     const value = event.currentTarget.value;
@@ -95,16 +101,22 @@ const Modalemployee = ({
     const name = event.currentTarget.name;
     const value = event.currentTarget.value;
     console.log(value);
-    const response = await postApi.findOneById(value);
-    console.log(response);
-    setPostes(response);
+    if (value != 0) {
+      const response = await postApi.findOneById(value);
+      console.log(response);
+      setPostes(response);
+    } else {
+      setPostes([]);
+    }
   };
 
   const handleSubmit = async (event) => {
     /*    document.querySelector(".card_user").classList.remove("active");
     document.querySelector(".operations_users").classList.remove("hide");*/
     event.preventDefault();
-    console.log(user);
+    if (user.poste == undefined) {
+      toast.error("Vous devez séléctionner un poste");
+    }
     const apiError = {};
     if (id == 0) {
       if (user.password !== user.passwordConfirm) {
@@ -115,24 +127,9 @@ const Modalemployee = ({
       } else {
         apiError.passwordConfirm = "";
       }
-      if(user.Departement =="null"){
-        apiError.Departement="Assignez un département"
-        setErrors(apiError)
-        return
-      }else{
-        apiError.Departement=""
-      }
     }
-    if (user.comeAt.length == 0) {
-      apiError.comeAt = "Vous devez renseigner une date";
-      setErrors(apiError);
-      return;
-    } else {
-      apiError.comeAt = "";
-    }
-
     try {
-       /*******************************************************************************************PARTIE AJOUT************************************************* */
+      /*******************************************************************************************PARTIE AJOUT************************************************* */
       if (id == 0) {
         const response = await employeApi.create(
           user.email,
@@ -152,7 +149,7 @@ const Modalemployee = ({
           adresse: "",
           comeAt: "",
         });
-       
+
         const {
           id,
           adresse,
@@ -179,28 +176,36 @@ const Modalemployee = ({
           },
         });
         setTable(table);
-        setUser({
-          adresse: "",
-          comeAt: "",
-          email: "",
-          firstName: "",
-          lastName: "",
-        });
+        // setUser({
+        //   adresse: "",
+        //   comeAt: "",
+        //   email: "",
+        //   firstName: "",
+        //   lastName: "",
+        // });
+        setId(0);
 
         if (response.status == 201) {
-          toast.success("Utilisateur ajouté avec Succès")
+          toast.success("Utilisateur ajouté avec Succès");
           onClose();
         }
-         /*******************************************************************************************PARTIE MODIFICATION************************************************* */
+        /*******************************************************************************************PARTIE MODIFICATION************************************************* */
       } else if (id != 0 && type == "AJOUTER_EMPLOYE") {
-        const response = await employeApi.update(id,user.email,user.firstName,user.lastName,user.photo,user.adresse,user.poste)
-        setUser({
-          adresse: "",
-          comeAt: "",
-          email: "",
-          firstName: "",
-          lastName: "",
-        });
+        const response = await employeApi.update(
+          id,
+          user.email,
+          user.firstName,
+          user.lastName,
+          user.adresse,
+          user.poste
+        );
+        // setUser({
+        //   adresse: "",
+        //   comeAt: "",
+        //   email: "",
+        //   firstName: "",
+        //   lastName: "",
+        // });
         table.map((t) => {
           if (t.id == id) {
             t.firstName = user.firstName;
@@ -210,23 +215,30 @@ const Modalemployee = ({
             t.photo = user.photo;
           }
         });
-
-        if (response.status == 200) {
-          onClose();
-        }
       }
-      //      onClose()
+      setUser({
+        adresse: "",
+        comeAt: "",
+        email: "",
+        firstName: "",
+        lastName: "",
+      });
+      onClose();
+      setId(0);
     } catch (error) {
-      if(error.response.status==400){
-        apiError.Departement="Indiquer un département"
-        setErrors(apiError)
-        console.log("Salut")
-      }
+      // if(error.response.status==400){
+      //   apiError.Departement="Indiquer un département"
+      //   setErrors(apiError)
+      //   console.log("Salut")
+      // }
       //      console.log(error.response)
       error.response.data.violations.forEach((violation) => {
         apiError[violation.propertyPath] = violation.message;
       });
+
+      console.log(error)
       setErrors(apiError);
+      toast.error("Veuillez remplir tous les champs");
     }
     if (Object.keys(apiError).length == 0) {
       onClose();
@@ -239,16 +251,19 @@ const Modalemployee = ({
         comeAt: "",
       });
     }
+    setId(0);
+    onClose();
   };
   /***************************************************************************************PARTIE SUPPRESSION ***************************************************** */
   const onRemove = async (event) => {
+    console.log("L'id de suppression est "+id)
     try {
-      const response = await employeApi.delete(id)
+      const response = await employeApi.delete(id);
       setTable(table.filter((t) => t.id != id));
-      onClose();
     } catch (error) {
-      console.log("erreur");
+      console.log(error);
     }
+    onClose();
   };
   /****************************************************************************************FIN SUPPRESSION DELETE**************************************************** */
   if (!isOpened) {
@@ -261,6 +276,7 @@ const Modalemployee = ({
           <BiX
             onClick={() => {
               onClose();
+              setId(0)
               setUser({
                 id: "",
                 adresse: "",

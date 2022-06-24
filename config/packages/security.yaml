@@ -48,3 +48,5 @@ security:
          - { path: ^/api/users, roles: IS_AUTHENTICATED_ANONYMOUSLY }
          - { path: ^/api/conges, roles: IS_AUTHENTICATED_ANONYMOUSLY }
          - { path: ^/api/media_objects, roles: IS_AUTHENTICATED_ANONYMOUSLY }
+         - { path: ^/api/pointages, roles: IS_AUTHENTICATED_FULLY }
+        

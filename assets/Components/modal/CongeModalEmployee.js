@@ -196,11 +196,13 @@ const CongeModalEmployee = ({
           <BiX
             onClick={() => {
               onClose();
+              setDepid(0)
               setConge({
                 DateDebut: "",
                 DateFin: "",
                 motif: "",
                 explication: "",
+                
               });
             }}
           />

@@ -11,7 +11,7 @@ const Ajouterpost = ({ handleSubmit, handleChange, errors, poste, id,departement
         <input
           type="text"
           className={errors.Designation.length > 0 ? "is-invalid" : ""}
-          placeholder="ex. Departement 655"
+          placeholder="ex. Web Developper"
           name="designation"
           onChange={handleChange}
           defaultValue={poste.designation}

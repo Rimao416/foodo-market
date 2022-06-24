@@ -7,11 +7,19 @@ import departementApi from "../../services/departementApi";
 import Ajouterpost from "../forms/Ajouterpost";
 import Supprimerpost from "../forms/Supprimerpost";
 import { toast } from "react-toastify";
-const Postmodal = ({ isOpened, onClose, Type, id, tables, setTables,setDepid}) => {
+const Postmodal = ({
+  isOpened,
+  onClose,
+  Type,
+  id,
+  tables,
+  setTables,
+  setDepid,
+}) => {
   const [errors, setErrors] = useState({
     Designation: "",
   });
-  console.log("L'id est "+id)
+  console.log("L'id est " + id);
 
   const [poste, setPoste] = useState({
     designation: "",
@@ -22,7 +30,7 @@ const Postmodal = ({ isOpened, onClose, Type, id, tables, setTables,setDepid}) =
   }, []);
   useEffect(() => {
     if (id != 0) {
-      console.log("Salut je me lance")
+      console.log("Salut je me lance");
       fetchPoste(id);
     }
   }, [id]);
@@ -46,9 +54,8 @@ const Postmodal = ({ isOpened, onClose, Type, id, tables, setTables,setDepid}) =
 
   const fetchDepartements = async () => {
     try {
-      const data = await departementApi
-        .findAll()
-        setDepartements(data) 
+      const data = await departementApi.findAll();
+      setDepartements(data);
     } catch (error) {
       console.log(error.response);
     }
@@ -75,6 +82,7 @@ const Postmodal = ({ isOpened, onClose, Type, id, tables, setTables,setDepid}) =
             t.departement.Nom = response.data.departement.Nom;
           }
         });
+        toast.info("La modification est un succès");
         //*****************************************AJOUT DU POSTE****************************** */
       } else if (id == 0) {
         const response = await postApi.create(
@@ -91,11 +99,11 @@ const Postmodal = ({ isOpened, onClose, Type, id, tables, setTables,setDepid}) =
           },
         });
         setTables(tables);
-        toast.success("Le poste est ajouté avec succèss")
+        toast.success("Le poste est ajouté avec succèss");
       }
-     // setPoste({...poste,departement:data[0].id})
+      // setPoste({...poste,departement:data[0].id})
       setPoste({ designation: "" });
-      setDepid(0)
+      setDepid(0);
       //      onClose()
     } catch (error) {
       error.response.data.violations.forEach((violation) => {
@@ -113,12 +121,12 @@ const Postmodal = ({ isOpened, onClose, Type, id, tables, setTables,setDepid}) =
     try {
       const response = await postApi.delete(id);
       setTables(tables.filter((table) => table.id != id));
-      setPoste({ designation: "" });
-      setDepid(0)
-      onClose();
     } catch (error) {
-      console.log("erreur");
+      toast.info("Erreur lors de la suppression");
     }
+    setPoste({ designation: "" });
+    setDepid(0);
+    onClose();
   };
   return createPortal(
     <div className="overlay">
@@ -128,6 +136,7 @@ const Postmodal = ({ isOpened, onClose, Type, id, tables, setTables,setDepid}) =
             onClick={() => {
               onClose();
               setPoste({ designation: "" });
+              setDepid(0);
             }}
           />
         </span>

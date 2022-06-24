@@ -90,16 +90,16 @@ const Modal = ({
   //------------------------------------------------------------SUPPRESSION D'UN DEPARTEMENT-------------------------------------------------
   const onRemove = async (event) => {
     console.log(id);
+    // const originalDepartements=[...departement]
     try {
       await departementApi.delete(id);
       toast.success("La suppression du département est un succèss");
+      setTables(tables.filter((table) => table.id != id));
     } catch (error) {
       toast.warning(
         "Erreur de suppression : Ce département pourrait avoir plusieurs postes"
       );
-      console.log("Une erreur au niveau de la suppression");
     }
-    setTables(tables.filter((table) => table.id != id));
     onClose();
     setDepid(0);
     setDepartement({ Nom: "" });

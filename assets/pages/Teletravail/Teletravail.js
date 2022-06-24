@@ -6,6 +6,7 @@ import Select from "../../Components/forms/Select";
 import "./teletravail.css";
 import { toast } from "react-toastify";
 export default function Teletravail() {
+const [userId,setUserId]=useState(0)
   const [users, setUsers] = useState([]);
   const fetchUsers = async () => {
     const data = await employeApi.getUsers();
@@ -36,6 +37,7 @@ export default function Teletravail() {
   const handleChange = (event) => {
     const value = event.currentTarget.value;
     const name = event.currentTarget.name;
+     console.log(value);
     //    setUser({ ...user, [name]: value });
     setUser({
       ...user,
@@ -108,9 +110,9 @@ export default function Teletravail() {
               // value={poste.departement}
               onChange={handleChange}
             >
-              <option value="">--------------------------------</option>
+              <option value="" required>--------------------------------</option>
               {users.map((user) => (
-                <option key={user.id} value={user.id}>
+                <option key={user.id} value={user.matricule}>
                   {user.firstName}
                 </option>
               ))}

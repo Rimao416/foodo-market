@@ -145,13 +145,13 @@ const Employee = () => {
         )}
       </div>
       <Modalemployee
-        table={employes}
-        setTable={setEmploye}
         isOpened={isModalOpened}
         onClose={() => setIsModalOpened(false)}
-        id={depid}
-        setId={setDepid}
         type={type}
+        id={depid}
+        table={employes}
+        setTable={setEmploye}
+        setId={setDepid}
       />
     </>
   );

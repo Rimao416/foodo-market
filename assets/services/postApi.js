@@ -10,7 +10,7 @@ function deletePoste(id) {
 }
 function findOneById(id){
   return axios.get(DEPARTEMENTS_API+"/"+id+"/postes")
-  .then((response)=>response.data["hydra:member"])
+  .then((response)=>response.data)
 }
 
 function find(id) {

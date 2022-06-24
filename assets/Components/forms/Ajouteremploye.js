@@ -1,3 +1,4 @@
+import moment from 'moment'
 import React from 'react'
 import Select from './Select'
 const Ajouteremploye = ({handleSubmit,errors,user,handleChange,id,departements,postes,handleChoose}) => {
@@ -115,6 +116,7 @@ const Ajouteremploye = ({handleSubmit,errors,user,handleChange,id,departements,p
                   label="Choisir un   département"
                   onChange={handleChoose}
                 >
+                  <option value="">--------------------------</option>
                   {departements.map((departement) => (
                     <option key={departement.id} value={departement.id}>
                       {departement.Nom}
@@ -132,7 +134,7 @@ const Ajouteremploye = ({handleSubmit,errors,user,handleChange,id,departements,p
                       label="Choisir un poste"
                       onChange={handleChange}
                     >
-                      <option value="null">----------------------------------------</option>
+                      <option value="">Choisissez un poste</option>
                       {postes.map((poste) => (
                         <option key={poste.id} value={poste.id}>
                           {poste.Designation}
@@ -157,8 +159,10 @@ const Ajouteremploye = ({handleSubmit,errors,user,handleChange,id,departements,p
                   placeholder="ex. Av. Hédi Nouira"
                   className={errors.comeAt && "is-invalid"}
                   name="comeAt"
+                  // defaultValue= {moment(user.comeAt).format("yyyy-mm-DD")}
                   defaultValue={user.comeAt}
                   onChange={handleChange}
+                  required
                 />
                 {errors.comeAt && (
                   <p className="error-input">{errors.comeAt}</p>

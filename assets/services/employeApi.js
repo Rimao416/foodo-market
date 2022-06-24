@@ -31,12 +31,11 @@ function create(
     poste: `/api/postes/${Poste}`,
   });
 }
-function update(id, Email, Firstname, Lastname, Photo, Adresse, Poste) {
+function update(id, Email, Firstname, Lastname, Adresse, Poste) {
   return axios.put(EMPLOYES_API + "/" + id, {
     email: Email,
     firstName: Firstname,
     lastName: Lastname,
-    photo: Photo,
     adresse: Adresse,
     poste: `/api/postes/${Poste}`,
   });
