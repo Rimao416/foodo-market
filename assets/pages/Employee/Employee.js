@@ -53,13 +53,28 @@ const Employee = () => {
             </button>
 
           </Title>
+
         </div>
-        <div className="search_control">
-          <input type="text" placeholder="ex. Omari, Departement" />
-          <button type="submit" className="form-green">
-            Rechercher
-          </button>
-        </div>
+        <div className="header-input">
+            <input
+              type="text"
+              placeholder="ex Omari Kayumba"
+              name=""
+            />
+            <input
+              type="text"
+              placeholder="ex. mariem@gmail.com"
+              value=""
+              name=""
+            />
+            <input
+              type="text"
+              placeholder="15"
+              value=""
+              name=""
+            />
+           
+          </div>
         {view == "card" ? (
           <>
             {employes.map((employe) => (

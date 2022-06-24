@@ -47,6 +47,14 @@ const Departments = () => {
               Ajouter un département
             </button>
           </Title>
+          <div className="header-input">
+            <input
+              type="text"
+              placeholder="ex Informatique"
+              name=""
+            />
+           
+          </div>
           <table>
             <thead>
               <tr>

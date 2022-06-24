@@ -31,7 +31,7 @@ const App = () => {
   const PrivateRoute = ({ path, component }) => {
     const { isAuthenticated } = useContext(AuthContext);
     return isAuthenticated ? (
-      <Route path={path} exact component={component} />
+      <Route path={path} component={component} exact/>
     ) : (
       <Redirect to="/login" />
     );
@@ -53,12 +53,13 @@ const App = () => {
 
               <PrivateRoute path="/postes" component={Poste} />
               <PrivateRoute path="/employee" component={Employee} />
-              <PrivateRoute path="/pointage" component={Pointage} />
-              <PrivateRoute path="/pointage/:id" component={PointageUser} />
               <PrivateRoute
                 path="/pointage/teletravail"
                 component={Teletravail}
               />
+              <PrivateRoute path="/pointage" component={Pointage} />
+              <PrivateRoute path="/pointage/:id" component={PointageUser} />
+              
               <PrivateRoute path="/departments" component={Departments} />
               <PrivateRoute path="/conge" component={Conge} />
               <PrivateRoute path="/congeuser" component={CongeEmployee} />

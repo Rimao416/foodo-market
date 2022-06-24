@@ -47,6 +47,19 @@ const Conge = () => {
           <Title nomdepage="Dashboard" subname="Congé">
             <button>Ajouter un Férié</button>
           </Title>
+          <div className="header-input">
+            <input
+              type="text"
+              placeholder="Entrez le nom de l'employé"
+              name="noms"
+            />
+            <input
+              type="text"
+              placeholder="Entrez le nom du département"
+              name="departement"
+            />
+           
+          </div>
           <table>
             <thead>
               <tr>

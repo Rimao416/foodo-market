@@ -28,7 +28,7 @@ const Usercard = ({
     <>
       <div className="card_user" id={"user" + id}>
         <span className="dot" onClick={() => changeValue(id)}>
-          <HiDotsVertical />
+          {/* <HiDotsVertical /> */}
         </span>
         <div className="profile_user">
           <img src={photo} alt="" />

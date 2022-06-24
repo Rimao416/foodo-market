@@ -12,6 +12,11 @@ import { toast } from "react-toastify";
 import ferieApi from "../../services/ferieApi";
 import TeletravailApi from "../../services/TeletravailApi";
 const Pointage = () => {
+  const [search, setSearch] = useState({
+    noms: "",
+    mois: "",
+    annee: new Date().getFullYear(),
+  });
   const [isDocumentLoaded, setIsDocumentLoaded] = useState(false);
   const [output, setOutput] = useState([]);
   const [employes, setEmploye] = useState([]);
@@ -257,6 +262,15 @@ const Pointage = () => {
       );
     };
   };
+  const handleSearch = (event) => {
+    const { value, name } = event.currentTarget;
+    setSearch({ ...search, [name]: value });
+  };
+  const filteredPointage = pointages.filter(
+    (p) =>
+      p.matricule.firstName.toLowerCase().includes(search.noms.toLowerCase()) &&
+      p.sentAt.includes(search.annee)
+  );
   return (
     <>
       <div className="pointage">
@@ -275,9 +289,21 @@ const Pointage = () => {
           </Title>
           <pre></pre>
           <div className="header-input">
-            <input type="text" placeholder="Entrez le nom de l'employé" />
-            <input type="text" />
-            <input type="text" />
+            <input
+              type="text"
+              placeholder="Entrez le nom de l'employé"
+              value={search.noms}
+              name="noms"
+              onChange={handleSearch}
+            />
+            <input
+              type="text"
+              placeholder="Entrez une date ex:01-2022 ou 2022"
+              value={search.annee}
+              name="annee"
+              onChange={handleSearch}
+            />
+           
           </div>
 
           <table>
@@ -286,31 +312,37 @@ const Pointage = () => {
                 <th>Employée</th>
                 <th>Poste</th>
                 <th>Jour de travail</th>
+                <th>Mois-Année</th>
                 <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-                             
-              {pointages.length > 0 && pointages.map((p) => (
-                <tr key={p.id}>
-                  <td>
-                    {p.matricule.firstName} | {p.matricule.lastName}
-                  </td>
-                  <td>{p.matricule.poste.Designation}</td>
-                  <td>{p.jourTravail} Jours</td>
-                  <td>
-                    <div className="form-group-button">
-                      <button>
-                        {" "}
-                        <Link to={`/pointage/${p.matricule.id}`}>
-                          Voir Plus
-                        </Link>{" "}
-                      </button>
-                    </div>
-                    <span></span>
-                  </td>
-                </tr>
-              ))} 
+              {filteredPointage.length > 0 &&
+                filteredPointage.map((p) => (
+                  <tr key={p.id}>
+                    <td>
+                      {p.matricule.firstName} | {p.matricule.lastName}
+                    </td>
+                    <td>{p.matricule.poste.Designation}</td>
+                    <td>{p.jourTravail} Jours</td>
+                    <td>
+                      {moment(p.sentAt, "MM-YYYY")
+                        .lang("fr")
+                        .format("MMMM-YYYY")}
+                    </td>
+                    <td>
+                      <div className="form-group-button">
+                        <button>
+                          {" "}
+                          <Link to={`/pointage/${p.matricule.id}`}>
+                            Voir Plus
+                          </Link>{" "}
+                        </button>
+                      </div>
+                      <span></span>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>

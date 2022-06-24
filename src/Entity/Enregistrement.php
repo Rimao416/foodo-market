@@ -7,9 +7,14 @@ use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Core\Annotation\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 use App\Controller\PointageDetailUser;
+use ApiPlatform\Core\Bridge\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Core\Annotation\ApiFilter;
 
 /**
  * @ApiResource(
+ * attributes={
+ * "pagination_enabled"=true,
+ * },
  * normalizationContext={
  * "groups"={"pointage_read"}
  * },collectionOperations={"PATCH","DELETE","GET","PUT","getDetail"={
@@ -18,6 +23,7 @@ use App\Controller\PointageDetailUser;
  * "controller"="App\Controller\PointageDetailUser"
  * }}
  * )
+ * @ApiFilter(SearchFilter::class,properties={"firstName","id"})
  * @ORM\Entity(repositoryClass=EnregistrementRepository::class)
  */
 class Enregistrement

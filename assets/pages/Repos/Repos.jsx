@@ -40,6 +40,19 @@ const Repos = () => {
               Ajouter un Férié
             </button>
           </Title>
+          <div className="header-input">
+            <input
+              type="text"
+              placeholder="ex Informatique"
+              name=""
+            />
+            <input
+              type="text"
+              placeholder="Entrez un jour ex 27-06-2009"
+              name=""
+            />
+          </div> 
+          
           <table>
             <thead>
               <tr>
