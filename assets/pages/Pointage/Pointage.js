@@ -4,6 +4,7 @@ import * as XLSX from "xlsx";
 import Title from "../../Components/title/Title";
 import PointageModal from "../../Components/modal/PointageModal";
 import { Link } from "react-router-dom/cjs/react-router-dom";
+import VisualisationExport from "../../Components/modal/VisualisationExport";
 import AlertPointageModal from "../../Components/modal/AlertPointageModal";
 import pointageApi from "../../services/pointageApi";
 import moment from "moment";
@@ -21,7 +22,10 @@ const Pointage = () => {
   const [output, setOutput] = useState([]);
   const [employes, setEmploye] = useState([]);
   const [isModalOpened, setIsModalOpened] = useState(false);
+  const [exportModal, setExportModal] = useState(false);
   const [pointages, setPointages] = useState([]);
+  const [dateGroup, setDateGroup] = useState([]);
+  const [yearMonth,setYearMonth]=useState('')
   var moi = {};
   const [items, setItems] = useState({
     pointeAt: "",
@@ -123,6 +127,12 @@ const Pointage = () => {
       ajoutPointage();
     }
   }, [employes]);
+
+  useEffect(() => {
+    if (dateGroup.length != 0) {
+      console.log(dateGroup);
+    }
+  }, [dateGroup]);
   var remplacer = [];
   const [status, setStatus] = useState(false);
   const [message, setMessage] = useState("");
@@ -243,20 +253,7 @@ const Pointage = () => {
         jourFerie = 0;
       }
       setOutput(output);
-      console.log(output);
-      console.log(pointageApi.returnId(12, employes));
-      console.log("le mois est" + mois);
-      // ajoutPointage();
 
-      // for (let k = 0; k <= output.length; k++) {
-      //   pointageApi.create(
-      //     output[k].id,
-      //     output[k].travail,
-      //     output[k].absence,
-      //     output[k].heure_supp,
-      //     output[k].heure_retard
-      //   );
-      // }
       toast.success(
         "Le données sont dans la base de donnée et sont prêtes à être exportées"
       );
@@ -286,6 +283,12 @@ const Pointage = () => {
             <button style={{ color: "white" }}>
               <Link to="/pointage/teletravail/">Télétravail</Link>{" "}
             </button>
+            <button
+              style={{ color: "white" }}
+              onClick={() => setIsModalOpened(true)}
+            >
+              Exporter
+            </button>
           </Title>
           <pre></pre>
           <div className="header-input">
@@ -303,7 +306,6 @@ const Pointage = () => {
               name="annee"
               onChange={handleSearch}
             />
-           
           </div>
 
           <table>
@@ -334,7 +336,7 @@ const Pointage = () => {
                       <div className="form-group-button">
                         <button>
                           {" "}
-                          <Link to={`/pointage/${p.matricule.id}`}>
+                          <Link to={`/pointage/user/${p.matricule.id}`}>
                             Voir Plus
                           </Link>{" "}
                         </button>
@@ -350,6 +352,17 @@ const Pointage = () => {
       <AlertPointageModal
         isOpened={isModalOpened}
         onClose={() => setIsModalOpened(false)}
+        dateGroup={dateGroup}
+        setDateGroup={setDateGroup}
+        // isExport={exportModal}
+        onOpenExport={()=>setExportModal(true)}
+        setYearMonth={setYearMonth}
+      />
+      <VisualisationExport
+        isExport={exportModal}
+        onCloseExport={() => setExportModal(false)}
+        dateGroup={dateGroup}
+        yearMonth={yearMonth}
       />
     </>
   );

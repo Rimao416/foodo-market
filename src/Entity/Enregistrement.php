@@ -17,10 +17,15 @@ use ApiPlatform\Core\Annotation\ApiFilter;
  * },
  * normalizationContext={
  * "groups"={"pointage_read"}
- * },collectionOperations={"PATCH","DELETE","GET","PUT","getDetail"={
+ * },collectionOperations={"POST","GET","getDetail"={
  * "method"="get",
  * "path"="/enregistrements/details/{matricule}/{annee}",
  * "controller"="App\Controller\PointageDetailUser"
+ * },
+ * "getExport"={
+ * "method"="get",
+ * "path"="/enregistrements/pointage/{date}/data",
+ * "controller"="App\Controller\PointageGroupUser"
  * }}
  * )
  * @ApiFilter(SearchFilter::class,properties={"firstName","id"})

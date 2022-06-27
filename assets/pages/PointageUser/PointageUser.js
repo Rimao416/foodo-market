@@ -48,7 +48,7 @@ export default function PointageUser(props) {
             <h4>Jours de travail</h4>
             {pointage.map((p, idx) => (
               <>
-                {idx < 5 && (
+                {idx < 4 && (
                   <div className="stats-info">
                     <p>
                       {moment(p.sentAt, "MM-YYYY")
@@ -73,7 +73,7 @@ export default function PointageUser(props) {
             <h4>Jours d'absences</h4>
             {pointage.map((p, idx) => (
               <>
-                {idx < 5 && (
+                {idx < 4 && (
                   <div className="stats-info">
                     <p>
                       {moment(p.sentAt, "MM-YYYY")

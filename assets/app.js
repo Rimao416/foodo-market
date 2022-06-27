@@ -53,12 +53,12 @@ const App = () => {
 
               <PrivateRoute path="/postes" component={Poste} />
               <PrivateRoute path="/employee" component={Employee} />
+              <PrivateRoute path="/pointage" component={Pointage} />
               <PrivateRoute
                 path="/pointage/teletravail"
                 component={Teletravail}
               />
-              <PrivateRoute path="/pointage" component={Pointage} />
-              <PrivateRoute path="/pointage/:id" component={PointageUser} />
+              <PrivateRoute path="/pointage/user/:id" component={PointageUser} />
               
               <PrivateRoute path="/departments" component={Departments} />
               <PrivateRoute path="/conge" component={Conge} />

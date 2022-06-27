@@ -37,7 +37,7 @@ const [userId,setUserId]=useState(0)
   const handleChange = (event) => {
     const value = event.currentTarget.value;
     const name = event.currentTarget.name;
-     console.log(value);
+    setId(value)
     //    setUser({ ...user, [name]: value });
     setUser({
       ...user,
@@ -53,26 +53,27 @@ const [userId,setUserId]=useState(0)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(pointage);
+
     // const chaine="Moi"
     // console.log(chaine);
-    var user_id = parseInt(
-      JSON.stringify(user)
-        .split(":")[1]
-        .replaceAll('"', "")
-        .replace("}", "")
-        .trim()
-    );
+    // var user_id = parseInt(
+    //   JSON.stringify(user)
+    //     .split(":")[1]
+    //     .replaceAll('"', "")
+    //     .replace("}", "")
+    //     .trim()
+    // );
     // console.log(pointage);
     for (let i = 0; i < pointage.length; i++) {
       try {
+        console.log(users);
         const data =await axios.
         post("http://localhost:8000/api/pointages", {
           startAt: addZero(pointage[i].startAt),
           endAt: addZero(pointage[i].endAt),
-          user: `api/users/${user_id}`,
           pointeAt: pointage[i].pointeAt,
           status: "DISTANCIEL",
+          matricule:parseInt(id)
         });
         // const data = await TeletravailApi.create(
         //   addZero(pointage[i].startAt),

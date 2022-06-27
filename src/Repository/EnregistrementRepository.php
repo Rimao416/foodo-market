@@ -74,6 +74,13 @@ class EnregistrementRepository extends ServiceEntityRepository
         ;
     }
     */
+    public function findByGroupPointage($year){
+        return $this->createQueryBuilder('e')
+        ->andWhere('e.sentAt = :sent') 
+        ->setParameter('sent',$year)
+        ->getQuery()
+        ->getResult();
+    }
     public function findByMatricule($value,$year){
         
         return $this->createQueryBuilder('e')

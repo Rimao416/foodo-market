@@ -29,13 +29,6 @@ use Doctrine\ORM\EntityManagerInterface;
             if($teletravail instanceof Pointage && $method == 'POST'){
                  $user=$this->security->getUser();
                  $teletravail->setUser($user);
-              $user_id=$teletravail->getUser()->getId();
-               $matricule=$this->manager->createQuery('SELECT u.matricule FROM App\Entity\User u WHERE u.id= :matricule')
-               ->setParameter('matricule',$user_id)
-               ->getResult();
-                 $teletravail->setMatricule(10);
-               $teletravail->setMatricule($matricule[0]["matricule"]);
-                 $teletravail->setAuteur($user);
             }
         }
     }
