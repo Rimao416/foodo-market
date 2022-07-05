@@ -1,0 +1,1 @@
+export const ROLES_AGENT_RH=['/postes','/employee','pointage','pointage/teletravail']

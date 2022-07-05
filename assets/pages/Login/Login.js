@@ -3,6 +3,7 @@ import "./Login.css";
 import authApi from "../../services/authApi";
 import AuthContext from "../../contexts/AuthContext";
 import { toast } from "react-toastify";
+import jwtDecode from "jwt-decode";
 export default function Login({history}) {
   const {setIsAuthenticated}=useContext(AuthContext)
   const [credentials, setCredentails] = useState({
@@ -21,7 +22,20 @@ export default function Login({history}) {
       await authApi.authenticate(credentials)
       setError(" ")
       setIsAuthenticated(true)
-      history.replace("/employee")
+      const token=window.localStorage.getItem('authToken')
+      const decodeToken=jwtDecode(token).roles
+      if(decodeToken.includes('ROLE_EMPLOYE')){
+        history.replace("/accueil")
+      }else{
+        history.replace("/employee")
+      }
+      // console.log(decodeToken)
+      // if(decodeToken=="ROLE_USER"){
+
+      // }else{
+        
+      // }
+
 
     }catch(error){
       console.log(error.response)

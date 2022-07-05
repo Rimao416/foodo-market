@@ -52,9 +52,20 @@ function isAuthenticated(){
    }
 
 }
+function getUserInfo(){
+  const token=window.localStorage.getItem("authToken")
+  if(token){
+    const jwtData=jwtDecode(token)
+    return jwtData.roles
+  }else{
+    return "moi"
+  }
+
+}
 export default {
   authenticate,
   logout,
   setup,
-  isAuthenticated
+  isAuthenticated,
+  getUserInfo
 };

@@ -20,18 +20,28 @@ import Departments from "./pages/Departments/Departments";
 import AuthContext from "./contexts/AuthContext";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+const userInfo = authApi.getUserInfo();
 
 authApi.setup();
-
+console.log("Salut tout le monde");
 const App = () => {
   //TODO : il faudrait par défaut qu'on demande à notre API si on est connecté ou pas
   const [isAuthenticated, setIsAuthenticated] = useState(
     authApi.isAuthenticated
   );
-  const PrivateRoute = ({ path, component }) => {
+  const PrivateRoute = ({ path, component, permission }) => {
     const { isAuthenticated } = useContext(AuthContext);
+    const role = authApi.getUserInfo();
+    console.log(role);
     return isAuthenticated ? (
-      <Route path={path} component={component} exact/>
+      //VER
+      role.includes(permission) ? (
+        <Route path={path} component={component} exact />
+      ) : role.includes("ROLE_AGENT") ? (
+        <Redirect to="/" />
+      ) : (
+        <Redirect to="/accueil" />
+      )
     ) : (
       <Redirect to="/login" />
     );
@@ -50,21 +60,61 @@ const App = () => {
             <Topbar />
             <div className="container">
               <SideBardWithRouter />
-
-              <PrivateRoute path="/postes" component={Poste} />
-              <PrivateRoute path="/employee" component={Employee} />
-              <PrivateRoute path="/pointage" component={Pointage} />
+              <PrivateRoute
+                path="/postes"
+                component={Poste}
+                permission="ROLE_AGENT"
+              />
+              <PrivateRoute
+                path="/employee"
+                component={Employee}
+                permission="ROLE_AGENT"
+              />
+              <PrivateRoute
+                path="/pointage"
+                component={Pointage}
+                permission="ROLE_AGENT"
+              />
               <PrivateRoute
                 path="/pointage/teletravail"
                 component={Teletravail}
+                permission="ROLE_AGENT"
               />
-              <PrivateRoute path="/pointage/user/:id" component={PointageUser} />
-              
-              <PrivateRoute path="/departments" component={Departments} />
-              <PrivateRoute path="/conge" component={Conge} />
-              <PrivateRoute path="/congeuser" component={CongeEmployee} />
-              <PrivateRoute path="/repos" component={Repos} />
-              <PrivateRoute path="/" component={Home} />
+              <PrivateRoute
+                path="/pointage/user/:id"
+                component={PointageUser}
+                permission="ROLE_AGENT"
+              />
+              <PrivateRoute
+                path="/accueil"
+                component={HomeEmploye}
+                permission="ROLE_EMPLOYE"
+              />
+              <PrivateRoute
+                path="/departments"
+                component={Departments}
+                permission="ROLE_AGENT"
+              />
+              <PrivateRoute
+                path="/conge"
+                component={Conge}
+                permission="ROLE_AGENT"
+              />
+              <PrivateRoute
+                path="/congeuser"
+                component={CongeEmployee}
+                permission="ROLE_EMPLOYE"
+              />
+              <PrivateRoute
+                path="/repos"
+                component={Repos}
+                permission="ROLE_AGENT"
+              />
+              <PrivateRoute
+                path="/"
+                component={Home}
+                permission="ROLE_AGENT"
+              />
             </div>
           </>
         </Switch>
@@ -78,5 +128,6 @@ import Teletravail from "./pages/Teletravail/Teletravail";
 import Repos from "./pages/Repos/Repos";
 import Conge from "./pages/Conge/Conge";
 import CongeEmployee from "./pages/CongeEmployee/CongeEmployee";
-import PointageUser from "./pages/PointageUser/PointageUser"
+import PointageUser from "./pages/PointageUser/PointageUser";
+import HomeEmploye from "./pages/HomeEmploye/HomeEmploye";
 ReactDom.render(<App />, document.getElementById("root"));
