@@ -1,5 +1,7 @@
 /*Configuration des buttons*/
-
+button a{
+  color: #fff;
+}
 button.form-first, button.form-cancel {
   
   color: #fff;

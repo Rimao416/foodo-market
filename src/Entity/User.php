@@ -58,20 +58,20 @@ class User implements UserInterface
 
     /**
      * @Assert\NotBlank(message="Le nom ne doit pas être vide")
-     * @Groups({"users_read","postes_read","conges_read","pointage_read"})
+     * @Groups({"users_read","postes_read","conges_read","pointage_read","contrat_read"})
      * @ORM\Column(type="string", length=255)
      */
     private $firstName;
 
     /**
      * @Assert\NotBlank(message="Le prenom ne doit pas être vide")
-     * @Groups({"users_read","postes_read","conges_read","pointage_read"})
+     * @Groups({"users_read","postes_read","conges_read","pointage_read","contrat_read"})
      * @ORM\Column(type="string", length=255)
      */
     private $lastName;
 
     /**
-     * @Groups({"users_read","postes_read","conges_read","pointage_read"})
+     * @Groups({"users_read","postes_read","conges_read","pointage_read","contrat_read"})
      * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $photo;

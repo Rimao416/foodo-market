@@ -6,7 +6,7 @@ import Select from "../../Components/forms/Select";
 import "./teletravail.css";
 import { toast } from "react-toastify";
 export default function Teletravail() {
-const [userId,setUserId]=useState(0)
+  const [userId, setUserId] = useState(0);
   const [users, setUsers] = useState([]);
   const fetchUsers = async () => {
     const data = await employeApi.getUsers();
@@ -37,7 +37,7 @@ const [userId,setUserId]=useState(0)
   const handleChange = (event) => {
     const value = event.currentTarget.value;
     const name = event.currentTarget.name;
-    setId(value)
+    setId(value);
     //    setUser({ ...user, [name]: value });
     setUser({
       ...user,
@@ -67,14 +67,17 @@ const [userId,setUserId]=useState(0)
     for (let i = 0; i < pointage.length; i++) {
       try {
         console.log(users);
-        const data =await axios.
-        post("http://localhost:8000/api/pointages", {
+        const data = await axios.post("http://localhost:8000/api/pointages", {
           startAt: addZero(pointage[i].startAt),
           endAt: addZero(pointage[i].endAt),
           pointeAt: pointage[i].pointeAt,
           status: "DISTANCIEL",
-          matricule:parseInt(id)
+          matricule: parseInt(id),
         });
+        toast.success("Information ajouté avec succès")
+        if(i==pointage.length -1){
+          toast.info("Tous les informations ont été ajoutés")
+        }
         // const data = await TeletravailApi.create(
         //   addZero(pointage[i].startAt),
         //   addZero(pointage[i].endAt),
@@ -104,20 +107,29 @@ const [userId,setUserId]=useState(0)
             <button onClick={handleaddclick}>Ajouter une date</button>
           </Title>
           <pre></pre>
+
           <form className="formulaire" onSubmit={handleSubmit}>
-            <Select
-              name="user"
-              label="Choisissez l'utilisateur"
-              // value={poste.departement}
-              onChange={handleChange}
-            >
-              <option value="" required>--------------------------------</option>
-              {users.map((user) => (
-                <option key={user.id} value={user.matricule}>
-                  {user.firstName}
+            <div className="userChoose">
+              <Select
+                name="user"
+                label="Choisissez l'utilisateur"
+                // value={poste.departement}
+                onChange={handleChange}
+              >
+                <option value="" required>
+                  --------------------------------
                 </option>
-              ))}
-            </Select>
+                {users.map((user) => (
+                  <>
+                    {user.roles.includes("ROLE_EMPLOYE") && (
+                      <option key={user.id} value={user.matricule}>
+                        {user.firstName}
+                      </option>
+                    )}
+                  </>
+                ))}
+              </Select>
+            </div>
             {pointage.map((p, index) => (
               <div key={index}>
                 <div className="form-grap">
@@ -131,6 +143,7 @@ const [userId,setUserId]=useState(0)
                       name="pointeAt"
                       data-id={index}
                       defaultValue={p.date}
+                      required
                       onChange={(e) => handleinputchange(e, index)}
                     />
                   </div>
@@ -156,6 +169,7 @@ const [userId,setUserId]=useState(0)
                       name="endAt"
                       data-id={index}
                       defaultValue={p.endAt}
+                      required
                       onChange={(e) => handleinputchange(e, index)}
                     />
                   </div>

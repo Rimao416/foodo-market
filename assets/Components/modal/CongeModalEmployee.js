@@ -78,17 +78,21 @@ const CongeModalEmployee = ({
   };
   const handleSubmit = async (event) => {
     event.preventDefault();
-    // let file = new FormData();
-    // file.append("file", conge.file);
-    // // console.log(file.get("file"));
-    // try {
-    //   await axios
-    //     .post("http://localhost:8000/api/media_objects", file=conge.file, {
-    //     })
-    //     .then((response) => console.log(response.data));
-    // } catch (error) {
-    //   console.log(error.response);
-    // }
+    console.log(conge.file)
+    let file = new FormData();
+    file.append("file", conge.file);
+    // console.log(file.get("file"));
+    try {
+      await axios
+        .post("http://localhost:8000/api/media_objects", file, {
+          headers:{
+            "Content-Type":"multipart/form-data;"
+          }
+        })
+        .then((response) => console.log(response.data));
+    } catch (error) {
+      console.log(error.response);
+    }
     try {
       if (id != 0) {
         const response = await axios.put(
@@ -109,8 +113,6 @@ const CongeModalEmployee = ({
               t.explication = response.data.explication;
             }
           });
-          // console.log(tables);
-          // console.log(response.data.DateDebut);
 
           setDepid(0);
           onClose();

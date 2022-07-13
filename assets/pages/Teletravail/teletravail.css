@@ -37,3 +37,10 @@
     display: inline;
     padding: 10px;
 }*/
+.userChoose{
+    text-align: center;
+}
+.userChoose Select{
+    padding: .4rem .3rem;
+    margin-bottom: 2%;
+}
